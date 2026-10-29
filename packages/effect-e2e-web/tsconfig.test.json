@@ -11,7 +11,11 @@
       "@systemfsoftware/source"
     ],
     "emitDeclarationOnly": true,
-    "outDir": "node_modules/.cache/tsc/test"
+    "outDir": "node_modules/.cache/tsc/test",
+    "types": [
+      "node",
+      "vitest/importMeta"
+    ]
   },
   "include": [
     "tests"

@@ -1,15 +1,15 @@
 {
   "name": "@systemfsoftware/effect-e2e-web",
   "license": "Apache-2.0",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Ryan Lee <drdgvhbh@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/systemfsoftware/systemfsoftware.git",
-    "directory": "packages/runner/effect-e2e-web"
+    "url": "git+https://github.com/systemfsoftware/effect-e2e.git",
+    "directory": "packages/effect-e2e-web"
   },
-  "homepage": "https://github.com/systemfsoftware/systemfsoftware/tree/main/packages/runner/effect-e2e-web#readme",
-  "bugs": "https://github.com/systemfsoftware/systemfsoftware/issues",
+  "homepage": "https://github.com/systemfsoftware/effect-e2e/tree/main/packages/effect-e2e-web#readme",
+  "bugs": "https://github.com/systemfsoftware/effect-e2e/issues",
   "description": "The web engine for @systemfsoftware/effect-e2e: the Engine service over a Playwright browser.",
   "keywords": [
     "effect",
@@ -48,14 +48,14 @@
   "devDependencies": {
     "@microsoft/api-extractor": "catalog:",
     "@systemfsoftware/arethetypeswrong-cli": "catalog:",
-    "@systemfsoftware/effect-gherkin-spec": "workspace:^",
-    "@systemfsoftware/effect-schema-law": "workspace:^",
-    "@systemfsoftware/effect-schema-vite": "workspace:^",
-    "@systemfsoftware/oxlint-config-recommended": "workspace:^",
-    "@systemfsoftware/tsconfig": "workspace:^",
-    "@systemfsoftware/tsdown-config": "workspace:^",
-    "@systemfsoftware/vitest": "workspace:^",
-    "@systemfsoftware/vitest-config": "workspace:^",
+    "@systemfsoftware/effect-gherkin-spec": "^8.0.0",
+    "@systemfsoftware/effect-schema-law": "^6.1.0",
+    "@systemfsoftware/effect-schema-vite": "^3.1.1",
+    "@systemfsoftware/oxlint-config-recommended": "^5.0.0",
+    "@systemfsoftware/tsconfig": "^2.0.2",
+    "@systemfsoftware/tsdown-config": "^0.1.1",
+    "@systemfsoftware/vitest": "^3.0.0",
+    "@systemfsoftware/vitest-config": "^0.1.1",
     "@types/node": "catalog:",
     "effect": "catalog:",
     "oxlint": "catalog:oxlint",
