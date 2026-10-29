@@ -15,10 +15,12 @@ const keyPathText = (path: ReadonlyArray<PathSegment>): string => path.map(stepT
 const pathText = (path: ReadonlyArray<PathSegment>): string => (path.length === 0 ? '(root)' : keyPathText(path))
 
 /** A config that does not decode: the key path of the first refusal and what that key expected. */
-export class ConfigInvalid extends Schema.TaggedError<ConfigInvalid>()('ConfigInvalid', {
-  path: Schema.Array(PathSegment),
-  expected: Schema.String,
-}) {
+export class ConfigInvalid
+  extends Schema.TaggedError<ConfigInvalid, { readonly brand: unique symbol }>()('ConfigInvalid', {
+    path: Schema.Array(PathSegment),
+    expected: Schema.String,
+  })
+{
   override get message(): string {
     return `config ${pathText(this.path)}: ${this.expected}`
   }

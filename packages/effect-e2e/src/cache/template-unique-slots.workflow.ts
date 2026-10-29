@@ -11,20 +11,22 @@ import { canonicalJsonOf, type ParamValue, StepParams, type UniqueSlot, uniqueSl
 
 const TemplateUniqueSlotsTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/TemplateUniqueSlots')
 
-export class TemplateUniqueSlots extends Schema.TaggedClass<TemplateUniqueSlots>()('TemplateUniqueSlots', {
-  params: StepParams,
-  entry: TraceEntry,
-}) {
+export class TemplateUniqueSlots
+  extends Schema.TaggedClass<TemplateUniqueSlots, { readonly brand: unique symbol }>()('TemplateUniqueSlots', {
+    params: StepParams,
+    entry: TraceEntry,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 
-export class Templated extends Schema.TaggedClass<Templated>()('Templated', {
+export class Templated extends Schema.TaggedClass<Templated, { readonly brand: unique symbol }>()('Templated', {
   entry: TraceEntry,
 }) {
   readonly [TemplateUniqueSlotsTypeId] = TemplateUniqueSlotsTypeId
 }
 
-export class NotRecorded extends Schema.TaggedClass<NotRecorded>()('NotRecorded', {
+export class NotRecorded extends Schema.TaggedClass<NotRecorded, { readonly brand: unique symbol }>()('NotRecorded', {
   reason: Schema.Literals(['param-collision', 'placeholder-literal']),
 }) {
   readonly [TemplateUniqueSlotsTypeId] = TemplateUniqueSlotsTypeId

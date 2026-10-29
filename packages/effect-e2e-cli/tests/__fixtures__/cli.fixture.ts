@@ -53,6 +53,19 @@ const stdinOf = (input: string | undefined) =>
     onSome: (keys) => Stream.make(new TextEncoder().encode(keys)),
   })
 
+const shellQuoted = (word: string) => `'${word.replaceAll("'", "'\\''")}'`
+
+/**
+ * Keystrokes only reach a prompt on a terminal (effect 4.1 skips fallback prompts off a TTY), so a request with
+ * `input` runs the bin under a pseudo-terminal from util-linux `script`.
+ */
+const invocationOf = (request: BinRequest): readonly [command: string, args: ReadonlyArray<string>] => {
+  const command = request.command ?? BIN
+  return request.input === undefined
+    ? [command, request.args]
+    : ['script', ['-qec', [command, ...request.args].map(shellQuoted).join(' '), '/dev/null']]
+}
+
 /** Runs a binary as a child process with only PATH and HOME from the environment, and collects its output. */
 export const runBin = (request: BinRequest) =>
   Effect.scoped(
@@ -60,8 +73,9 @@ export const runBin = (request: BinRequest) =>
       const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
       const inherited = yield* Config.String('PATH')
       const home = yield* Config.String('HOME')
+      const [command, args] = invocationOf(request)
       const handle = yield* spawner.spawn(
-        ChildProcess.make(request.command ?? BIN, [...request.args], {
+        ChildProcess.make(command, [...args], {
           cwd: request.cwd,
           env: {
             PATH: Option.match(Option.fromNullishOr(request.pathPrefix), {

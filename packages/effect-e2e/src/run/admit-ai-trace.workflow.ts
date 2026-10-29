@@ -13,18 +13,24 @@ const AiTraceAdmissionTypeId: unique symbol = Symbol.for('@systemfsoftware/effec
  * Admission is independent of the `trace` setting (design §13.3), so a failing try with `trace` off still writes
  * its ai-trace (requirements R6, R7).
  */
-export class AdmitAiTrace extends Schema.TaggedClass<AdmitAiTrace>()('AdmitAiTrace', {
-  aiTrace: Schema.Boolean,
-  status: RunStatus,
-}) {
+export class AdmitAiTrace
+  extends Schema.TaggedClass<AdmitAiTrace, { readonly brand: unique symbol }>()('AdmitAiTrace', {
+    aiTrace: Schema.Boolean,
+    status: RunStatus,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { aiTrace: 'app.e2e.run.ai-trace' } as const
 }
 
-export class AiTraceAdmitted extends Schema.TaggedClass<AiTraceAdmitted>()('AiTraceAdmitted', {}) {
+export class AiTraceAdmitted
+  extends Schema.TaggedClass<AiTraceAdmitted, { readonly brand: unique symbol }>()('AiTraceAdmitted', {})
+{
   readonly [AiTraceAdmissionTypeId] = AiTraceAdmissionTypeId
 }
 
-export class AiTraceDeclined extends Schema.TaggedClass<AiTraceDeclined>()('AiTraceDeclined', {}) {
+export class AiTraceDeclined
+  extends Schema.TaggedClass<AiTraceDeclined, { readonly brand: unique symbol }>()('AiTraceDeclined', {})
+{
   readonly [AiTraceAdmissionTypeId] = AiTraceAdmissionTypeId
 }
 

@@ -21,7 +21,7 @@ import {
 const JudgedReplyTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/JudgedReply')
 type JudgedReplyTypeId = typeof JudgedReplyTypeId
 
-export class Accepted extends Schema.TaggedClass<Accepted>()('Accepted', {
+export class Accepted extends Schema.TaggedClass<Accepted, { readonly brand: unique symbol }>()('Accepted', {
   answer: ModelAnswer,
   finishReason: FinishReason,
   usage: TokenUsage,
@@ -30,7 +30,9 @@ export class Accepted extends Schema.TaggedClass<Accepted>()('Accepted', {
   readonly [JudgedReplyTypeId] = JudgedReplyTypeId
 }
 
-export class JudgeReply extends Schema.TaggedClass<JudgeReply>()('JudgeReply', { reply: ProviderReply }) {
+export class JudgeReply
+  extends Schema.TaggedClass<JudgeReply, { readonly brand: unique symbol }>()('JudgeReply', { reply: ProviderReply })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

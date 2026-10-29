@@ -11,33 +11,42 @@ import { FailureCode } from './failure.schema.js'
 const DefaultCauseTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/DefaultCause')
 type DefaultCauseTypeId = typeof DefaultCauseTypeId
 
-export class ProductCause extends Schema.TaggedClass<ProductCause>()('ProductCause', RecordedProposal.fields) {
-  readonly [DefaultCauseTypeId] = DefaultCauseTypeId
-}
-
-export class AutomationCause extends Schema.TaggedClass<AutomationCause>()('AutomationCause', RecordedProposal.fields) {
-  readonly [DefaultCauseTypeId] = DefaultCauseTypeId
-}
-
-export class EnvironmentCause
-  extends Schema.TaggedClass<EnvironmentCause>()('EnvironmentCause', RecordedProposal.fields)
+export class ProductCause
+  extends Schema.TaggedClass<ProductCause, { readonly brand: unique symbol }>()('ProductCause', RecordedProposal.fields)
 {
   readonly [DefaultCauseTypeId] = DefaultCauseTypeId
 }
 
-export class UnclassifiedCause
-  extends Schema.TaggedClass<UnclassifiedCause>()('UnclassifiedCause', RecordedProposal.fields)
-{
+export class AutomationCause extends Schema.TaggedClass<AutomationCause, { readonly brand: unique symbol }>()(
+  'AutomationCause',
+  RecordedProposal.fields,
+) {
+  readonly [DefaultCauseTypeId] = DefaultCauseTypeId
+}
+
+export class EnvironmentCause extends Schema.TaggedClass<EnvironmentCause, { readonly brand: unique symbol }>()(
+  'EnvironmentCause',
+  RecordedProposal.fields,
+) {
+  readonly [DefaultCauseTypeId] = DefaultCauseTypeId
+}
+
+export class UnclassifiedCause extends Schema.TaggedClass<UnclassifiedCause, { readonly brand: unique symbol }>()(
+  'UnclassifiedCause',
+  RecordedProposal.fields,
+) {
   readonly [DefaultCauseTypeId] = DefaultCauseTypeId
 }
 
 export const DefaultCause = Schema.Union([ProductCause, AutomationCause, EnvironmentCause, UnclassifiedCause])
 export type DefaultCause = typeof DefaultCause.Type
 
-export class DefaultFailureCause extends Schema.TaggedClass<DefaultFailureCause>()('DefaultFailureCause', {
-  code: Schema.String,
-  ...RecordedProposal.fields,
-}) {
+export class DefaultFailureCause
+  extends Schema.TaggedClass<DefaultFailureCause, { readonly brand: unique symbol }>()('DefaultFailureCause', {
+    code: Schema.String,
+    ...RecordedProposal.fields,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

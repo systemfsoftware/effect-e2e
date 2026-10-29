@@ -54,28 +54,34 @@ const ProposeCauseTool = Schema.Struct({
 const CauseProposalDecisionTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/CauseProposalDecision')
 type CauseProposalDecisionTypeId = typeof CauseProposalDecisionTypeId
 
-export class CauseClassified extends Schema.TaggedClass<CauseClassified>()('CauseClassified', {
-  failure: FailureRecord,
-}) {
+export class CauseClassified
+  extends Schema.TaggedClass<CauseClassified, { readonly brand: unique symbol }>()('CauseClassified', {
+    failure: FailureRecord,
+  })
+{
   readonly [CauseProposalDecisionTypeId] = CauseProposalDecisionTypeId
 }
 
-export class CauseUnchanged extends Schema.TaggedClass<CauseUnchanged>()('CauseUnchanged', {
-  failure: FailureRecord,
-}) {
+export class CauseUnchanged
+  extends Schema.TaggedClass<CauseUnchanged, { readonly brand: unique symbol }>()('CauseUnchanged', {
+    failure: FailureRecord,
+  })
+{
   readonly [CauseProposalDecisionTypeId] = CauseProposalDecisionTypeId
 }
 
 export const CauseProposalDecision = Schema.Union([CauseClassified, CauseUnchanged])
 export type CauseProposalDecision = typeof CauseProposalDecision.Type
 
-export class AdmitCauseProposal extends Schema.TaggedClass<AdmitCauseProposal>()('AdmitCauseProposal', {
-  failure: FailureRecord,
-  answer: ModelAnswer,
-  refs: Schema.Array(NodeRef),
-  logs: Schema.Array(Schema.String),
-  route: Route,
-}) {
+export class AdmitCauseProposal
+  extends Schema.TaggedClass<AdmitCauseProposal, { readonly brand: unique symbol }>()('AdmitCauseProposal', {
+    failure: FailureRecord,
+    answer: ModelAnswer,
+    refs: Schema.Array(NodeRef),
+    logs: Schema.Array(Schema.String),
+    route: Route,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

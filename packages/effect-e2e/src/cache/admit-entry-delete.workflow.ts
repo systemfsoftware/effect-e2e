@@ -7,17 +7,23 @@ import { StoreMode } from './cache-store.schema.js'
 
 const AdmitEntryDeleteTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/AdmitEntryDelete')
 
-export class AdmitEntryDelete extends Schema.TaggedClass<AdmitEntryDelete>()('AdmitEntryDelete', {
-  mode: StoreMode,
-}) {
+export class AdmitEntryDelete
+  extends Schema.TaggedClass<AdmitEntryDelete, { readonly brand: unique symbol }>()('AdmitEntryDelete', {
+    mode: StoreMode,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { mode: 'app.e2e.cache.store-mode' } as const
 }
 
-export class DeleteAdmitted extends Schema.TaggedClass<DeleteAdmitted>()('DeleteAdmitted', {}) {
+export class DeleteAdmitted
+  extends Schema.TaggedClass<DeleteAdmitted, { readonly brand: unique symbol }>()('DeleteAdmitted', {})
+{
   readonly [AdmitEntryDeleteTypeId] = AdmitEntryDeleteTypeId
 }
 
-export class DeleteRefused extends Schema.TaggedClass<DeleteRefused>()('DeleteRefused', {}) {
+export class DeleteRefused
+  extends Schema.TaggedClass<DeleteRefused, { readonly brand: unique symbol }>()('DeleteRefused', {})
+{
   readonly [AdmitEntryDeleteTypeId] = AdmitEntryDeleteTypeId
 }
 

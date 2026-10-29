@@ -70,7 +70,10 @@ export const copiedRunnerSuite = (config: SuiteConfig) =>
     yield* fs.makeDirectory(SCRATCH, { recursive: true })
     const root = yield* fs.makeTempDirectoryScoped({ directory: SCRATCH, prefix: 'cli-run-' })
     const suite = `${root}/suite`
-    yield* fs.copy(RUNNER_SUITE, suite)
+    yield* fs.makeDirectory(suite, { recursive: true })
+    // Other tests run this suite in place, so Vite keeps transient files under its node_modules while the copy reads.
+    const entries = (yield* fs.readDirectory(RUNNER_SUITE)).filter((entry) => entry !== 'node_modules')
+    yield* Effect.forEach(entries, (entry) => fs.copy(`${RUNNER_SUITE}/${entry}`, `${suite}/${entry}`))
     yield* fs.remove(`${suite}/.e2e`, { recursive: true, force: true })
     if (config === 'refused') {
       yield* fs.copyFile(`${suite}/vitest.refused.config.ts`, `${suite}/vitest.config.ts`)

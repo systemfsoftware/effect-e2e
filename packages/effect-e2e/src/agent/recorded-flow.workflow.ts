@@ -20,7 +20,7 @@ import { SemanticNode } from '../engine/semantic-node.schema.js'
 
 const RecordedFlowDecisionTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/RecordedFlowDecision')
 
-export class RecordFlow extends Schema.TaggedClass<RecordFlow>()('RecordFlow', {
+export class RecordFlow extends Schema.TaggedClass<RecordFlow, { readonly brand: unique symbol }>()('RecordFlow', {
   keyedBy: CacheKeyContext,
   start: Observation,
   end: Observation,
@@ -30,13 +30,17 @@ export class RecordFlow extends Schema.TaggedClass<RecordFlow>()('RecordFlow', {
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 
-export class Recorded extends Schema.TaggedClass<Recorded>()('Recorded', { entry: TraceEntry }) {
+export class Recorded
+  extends Schema.TaggedClass<Recorded, { readonly brand: unique symbol }>()('Recorded', { entry: TraceEntry })
+{
   readonly [RecordedFlowDecisionTypeId] = RecordedFlowDecisionTypeId
 }
 
-export class NotRecordable extends Schema.TaggedClass<NotRecordable>()('NotRecordable', {
-  reason: Schema.Literals(['no-actions', 'too-many-actions', 'no-change-evidenced']),
-}) {
+export class NotRecordable
+  extends Schema.TaggedClass<NotRecordable, { readonly brand: unique symbol }>()('NotRecordable', {
+    reason: Schema.Literals(['no-actions', 'too-many-actions', 'no-change-evidenced']),
+  })
+{
   readonly [RecordedFlowDecisionTypeId] = RecordedFlowDecisionTypeId
 }
 

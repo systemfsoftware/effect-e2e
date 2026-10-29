@@ -8,29 +8,31 @@ const LOGGED_BY_RUNTIME: Runtime.errorReported = '~effect/Runtime/errorReported'
  * `run` refused before it started Vitest: no suite root at or above the working directory, or flags that cannot
  * hold together. The CLI has printed why, so the process exits 2 without a second report.
  */
-export class RunRefused extends Schema.TaggedError<RunRefused>()('RunRefused', {
+export class RunRefused extends Schema.TaggedError<RunRefused, { readonly brand: unique symbol }>()('RunRefused', {
   message: Schema.String,
 }) {
   override readonly [EXIT_CODE] = 2
   override readonly [LOGGED_BY_RUNTIME] = false
 }
 
-export class RunConfigRefused extends Schema.TaggedError<RunConfigRefused>()('RunConfigRefused', {
-  message: Schema.String,
-}) {
+export class RunConfigRefused
+  extends Schema.TaggedError<RunConfigRefused, { readonly brand: unique symbol }>()('RunConfigRefused', {
+    message: Schema.String,
+  })
+{
   override readonly [EXIT_CODE] = 2
   override readonly [LOGGED_BY_RUNTIME] = false
 }
 
 /** The run could not start or produced no report: a Vitest config or collection error (requirements FR-5). */
-export class RunFailed extends Schema.TaggedError<RunFailed>()('RunFailed', {
+export class RunFailed extends Schema.TaggedError<RunFailed, { readonly brand: unique symbol }>()('RunFailed', {
   message: Schema.String,
 }) {
   override readonly [EXIT_CODE] = 2
   override readonly [LOGGED_BY_RUNTIME] = false
 }
 
-export class RunEnded extends Schema.TaggedError<RunEnded>()('RunEnded', {
+export class RunEnded extends Schema.TaggedError<RunEnded, { readonly brand: unique symbol }>()('RunEnded', {
   status: Schema.String,
   exitCode: Schema.Int,
 }) {

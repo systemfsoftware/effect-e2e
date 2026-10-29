@@ -14,9 +14,11 @@ export const StoredBytes = Schema.Union([
 ])
 export type StoredBytes = typeof StoredBytes.Type
 
-export class ClassifyStoredEntry extends Schema.TaggedClass<ClassifyStoredEntry>()('ClassifyStoredEntry', {
-  found: StoredBytes,
-}) {
+export class ClassifyStoredEntry
+  extends Schema.TaggedClass<ClassifyStoredEntry, { readonly brand: unique symbol }>()('ClassifyStoredEntry', {
+    found: StoredBytes,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

@@ -20,7 +20,7 @@ import {
 
 const CacheKeyTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/CacheKey')
 
-export class DeriveKey extends Schema.TaggedClass<DeriveKey>()('DeriveKey', {
+export class DeriveKey extends Schema.TaggedClass<DeriveKey, { readonly brand: unique symbol }>()('DeriveKey', {
   mode: CacheMode,
   step: StepKind,
   project: CacheKeyContext.fields.project,
@@ -37,14 +37,14 @@ export class DeriveKey extends Schema.TaggedClass<DeriveKey>()('DeriveKey', {
   static readonly [Workflow.InstrumentationBrand] = { mode: 'app.e2e.cache.mode' } as const
 }
 
-export class Keyed extends Schema.TaggedClass<Keyed>()('Keyed', {
+export class Keyed extends Schema.TaggedClass<Keyed, { readonly brand: unique symbol }>()('Keyed', {
   context: CacheKeyContext,
   canonical: CanonicalJson,
 }) {
   readonly [CacheKeyTypeId] = CacheKeyTypeId
 }
 
-export class Unkeyed extends Schema.TaggedClass<Unkeyed>()('Unkeyed', {}) {
+export class Unkeyed extends Schema.TaggedClass<Unkeyed, { readonly brand: unique symbol }>()('Unkeyed', {}) {
   readonly [CacheKeyTypeId] = CacheKeyTypeId
 }
 

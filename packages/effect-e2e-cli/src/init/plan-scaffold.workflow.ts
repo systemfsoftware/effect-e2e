@@ -22,39 +22,47 @@ export type SuiteWrite = typeof SuiteWrite.Type
 
 const Dependencies = Schema.Record(Schema.String, Schema.String)
 
-export class PlanScaffold extends Schema.TaggedClass<PlanScaffold>()('PlanScaffold', {
-  force: Schema.Boolean,
-  files: Schema.Array(TargetFile),
-  /** The suite root's `package.json` text, when it has one. */
-  manifest: Schema.Option(Schema.String),
-  /** The suite root's `.gitignore` text, when it has one. */
-  ignore: Schema.Option(Schema.String),
-  /** The name a `package.json` that `init` creates carries. */
-  name: Schema.String,
-  script: Schema.String,
-  devDependencies: Dependencies,
-  ignoredOutput: Schema.String,
-}) {
+export class PlanScaffold
+  extends Schema.TaggedClass<PlanScaffold, { readonly brand: unique symbol }>()('PlanScaffold', {
+    force: Schema.Boolean,
+    files: Schema.Array(TargetFile),
+    /** The suite root's `package.json` text, when it has one. */
+    manifest: Schema.Option(Schema.String),
+    /** The suite root's `.gitignore` text, when it has one. */
+    ignore: Schema.Option(Schema.String),
+    /** The name a `package.json` that `init` creates carries. */
+    name: Schema.String,
+    script: Schema.String,
+    devDependencies: Dependencies,
+    ignoredOutput: Schema.String,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { force: 'app.e2e.init.force' } as const
 }
 
-export class ScaffoldPlanned extends Schema.TaggedClass<ScaffoldPlanned>()('ScaffoldPlanned', {
-  writes: Schema.Array(SuiteWrite),
-}) {
+export class ScaffoldPlanned
+  extends Schema.TaggedClass<ScaffoldPlanned, { readonly brand: unique symbol }>()('ScaffoldPlanned', {
+    writes: Schema.Array(SuiteWrite),
+  })
+{
   readonly [PlanScaffoldTypeId] = PlanScaffoldTypeId
 }
 
 /** Files `init` would replace; without `--force` it writes nothing (requirements AC-1.4). */
-export class ScaffoldRefused extends Schema.TaggedClass<ScaffoldRefused>()('ScaffoldRefused', {
-  conflicts: Schema.NonEmptyArray(Schema.String),
-}) {
+export class ScaffoldRefused
+  extends Schema.TaggedClass<ScaffoldRefused, { readonly brand: unique symbol }>()('ScaffoldRefused', {
+    conflicts: Schema.NonEmptyArray(Schema.String),
+  })
+{
   readonly [PlanScaffoldTypeId] = PlanScaffoldTypeId
 }
 
 /** The suite root's `package.json` cannot be merged into, so `init` writes nothing. */
-export class ManifestUnreadable extends Schema.TaggedClass<ManifestUnreadable>()('ManifestUnreadable', {
-  expected: Schema.String,
-}) {
+export class ManifestUnreadable
+  extends Schema.TaggedClass<ManifestUnreadable, { readonly brand: unique symbol }>()('ManifestUnreadable', {
+    expected: Schema.String,
+  })
+{
   readonly [PlanScaffoldTypeId] = PlanScaffoldTypeId
 }
 

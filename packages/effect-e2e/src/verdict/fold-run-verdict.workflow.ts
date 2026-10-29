@@ -15,23 +15,34 @@ type RunVerdictDecisionTypeId = typeof RunVerdictDecisionTypeId
 
 const withFailures = { failures: Schema.NonEmptyArray(FailureRecord) }
 
-export class VerdictPassed extends Schema.TaggedClass<VerdictPassed>()('VerdictPassed', {}) {
+export class VerdictPassed
+  extends Schema.TaggedClass<VerdictPassed, { readonly brand: unique symbol }>()('VerdictPassed', {})
+{
   readonly [RunVerdictDecisionTypeId] = RunVerdictDecisionTypeId
 }
 
-export class VerdictFailed extends Schema.TaggedClass<VerdictFailed>()('VerdictFailed', withFailures) {
+export class VerdictFailed
+  extends Schema.TaggedClass<VerdictFailed, { readonly brand: unique symbol }>()('VerdictFailed', withFailures)
+{
   readonly [RunVerdictDecisionTypeId] = RunVerdictDecisionTypeId
 }
 
-export class VerdictBlocked extends Schema.TaggedClass<VerdictBlocked>()('VerdictBlocked', withFailures) {
+export class VerdictBlocked
+  extends Schema.TaggedClass<VerdictBlocked, { readonly brand: unique symbol }>()('VerdictBlocked', withFailures)
+{
   readonly [RunVerdictDecisionTypeId] = RunVerdictDecisionTypeId
 }
 
-export class VerdictErrored extends Schema.TaggedClass<VerdictErrored>()('VerdictErrored', withFailures) {
+export class VerdictErrored
+  extends Schema.TaggedClass<VerdictErrored, { readonly brand: unique symbol }>()('VerdictErrored', withFailures)
+{
   readonly [RunVerdictDecisionTypeId] = RunVerdictDecisionTypeId
 }
 
-export class VerdictInterrupted extends Schema.TaggedClass<VerdictInterrupted>()('VerdictInterrupted', withFailures) {
+export class VerdictInterrupted extends Schema.TaggedClass<VerdictInterrupted, { readonly brand: unique symbol }>()(
+  'VerdictInterrupted',
+  withFailures,
+) {
   readonly [RunVerdictDecisionTypeId] = RunVerdictDecisionTypeId
 }
 
@@ -44,10 +55,12 @@ export const RunVerdictDecision = Schema.Union([
 ])
 export type RunVerdictDecision = typeof RunVerdictDecision.Type
 
-export class FoldRunVerdict extends Schema.TaggedClass<FoldRunVerdict>()('FoldRunVerdict', {
-  steps: Schema.Array(StepRecord),
-  runErrors: Schema.Array(FailureRecord),
-}) {
+export class FoldRunVerdict
+  extends Schema.TaggedClass<FoldRunVerdict, { readonly brand: unique symbol }>()('FoldRunVerdict', {
+    steps: Schema.Array(StepRecord),
+    runErrors: Schema.Array(FailureRecord),
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

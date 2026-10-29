@@ -40,23 +40,25 @@ export const TryEnding = Schema.Union([
 ])
 export type TryEnding = typeof TryEnding.Type
 
-export class ConcludeAttempt extends Schema.TaggedClass<ConcludeAttempt>()('ConcludeAttempt', {
-  ending: TryEnding,
-  launches: Schema.Array(Launch),
-  records: Schema.Array(SessionRecord),
-  sessionErrors: Schema.Array(FailureRecord),
-}) {
+export class ConcludeAttempt
+  extends Schema.TaggedClass<ConcludeAttempt, { readonly brand: unique symbol }>()('ConcludeAttempt', {
+    ending: TryEnding,
+    launches: Schema.Array(Launch),
+    records: Schema.Array(SessionRecord),
+    sessionErrors: Schema.Array(FailureRecord),
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 
-export class TryPassed extends Schema.TaggedClass<TryPassed>()('TryPassed', {
+export class TryPassed extends Schema.TaggedClass<TryPassed, { readonly brand: unique symbol }>()('TryPassed', {
   steps: Schema.Array(StepRecord),
   staged: Schema.Array(StagedRecording),
 }) {
   readonly [ConcludeAttemptTypeId] = ConcludeAttemptTypeId
 }
 
-export class TryFailed extends Schema.TaggedClass<TryFailed>()('TryFailed', {
+export class TryFailed extends Schema.TaggedClass<TryFailed, { readonly brand: unique symbol }>()('TryFailed', {
   steps: Schema.Array(StepRecord),
   errors: Schema.Array(FailureRecord),
   staged: Schema.Array(StagedRecording),
@@ -65,10 +67,12 @@ export class TryFailed extends Schema.TaggedClass<TryFailed>()('TryFailed', {
   readonly [ConcludeAttemptTypeId] = ConcludeAttemptTypeId
 }
 
-export class TryCancelled extends Schema.TaggedClass<TryCancelled>()('TryCancelled', {
-  steps: Schema.Array(StepRecord),
-  errors: Schema.Array(FailureRecord),
-}) {
+export class TryCancelled
+  extends Schema.TaggedClass<TryCancelled, { readonly brand: unique symbol }>()('TryCancelled', {
+    steps: Schema.Array(StepRecord),
+    errors: Schema.Array(FailureRecord),
+  })
+{
   readonly [ConcludeAttemptTypeId] = ConcludeAttemptTypeId
 }
 
