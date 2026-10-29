@@ -156,8 +156,15 @@ const isNavigationOf = (url: string) => (entry: LogEntry): boolean =>
 
 const isRevealOf = (url: string) => (entry: LogEntry): boolean => LogEntry.guards.Reveal(entry) && entry.url === url
 
-const recordedFor = (logs: ReadonlyArray<LogEntry>, url: string): boolean =>
+const reportedUrls = (logs: ReadonlyArray<LogEntry>): string =>
+  [...logs.filter(LogEntry.guards.Navigation), ...logs.filter(LogEntry.guards.Reveal)]
+    .map((entry) => `${entry._tag}@${entry.url}`).join(', ')
+
+const bothRecorded = (logs: ReadonlyArray<LogEntry>, url: string): boolean =>
   logs.some(isNavigationOf(url)) && logs.some(isRevealOf(url))
+
+const recordedFor = (logs: ReadonlyArray<LogEntry>, url: string): boolean | string =>
+  bothRecorded(logs, url) || `missing for ${url}; recorded: [${reportedUrls(logs)}] of ${logs.length} entries`
 
 const navigationEvidence = (engine: EngineShape, logs: ReadonlyArray<LogEntry>, url: string): boolean | string =>
   declares(engine, 'navigation-timing') ? recordedFor(logs, url) : 'not declared'

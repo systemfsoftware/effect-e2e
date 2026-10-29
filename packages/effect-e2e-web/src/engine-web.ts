@@ -99,13 +99,14 @@ const closed = (session: Session): Effect.Effect<void> =>
 
 const REPORT_DELIVERY_TIMEOUT_MS = 5_000
 
-const hasReports = (entries: ReadonlyArray<LogEntry>): boolean =>
-  entries.some(LogEntry.guards.Navigation) && entries.some(LogEntry.guards.Reveal)
+const hasReportsFor = (url: string) => (entries: ReadonlyArray<LogEntry>): boolean =>
+  entries.some((entry) => LogEntry.guards.Navigation(entry) && entry.url === url) &&
+  entries.some((entry) => LogEntry.guards.Reveal(entry) && entry.url === url)
 
-/** The page reporter delivers asynchronously; `open` returns only once navigation and reveal are recorded. */
-const deliveredReports = (logs: Ref.Ref<ReadonlyArray<LogEntry>>): Effect.Effect<void> =>
+/** The page reporter delivers asynchronously; `open` returns only once the opened page's navigation and reveal are recorded. */
+const deliveredReports = (logs: Ref.Ref<ReadonlyArray<LogEntry>>, url: string): Effect.Effect<void> =>
   Ref.get(logs).pipe(
-    Effect.map(hasReports),
+    Effect.map(hasReportsFor(url)),
     Effect.repeat({ schedule: Schedule.spaced('25 millis'), until: (delivered) => delivered }),
     Effect.timeoutOption(`${REPORT_DELIVERY_TIMEOUT_MS} millis`),
     Effect.asVoid,
@@ -140,7 +141,7 @@ const started =
       const page = yield* attempt(() => context.newPage())
       listened(page, logs)
       yield* attempt(() => page.goto(url)).pipe(Effect.tapError(() => Effect.ignore(attempt(() => context.close()))))
-      yield* Effect.when(deliveredReports(logs), Effect.succeed(reports))
+      yield* Effect.when(deliveredReports(logs, page.url()), Effect.succeed(reports))
       return { context, page, logs, revision: yield* Ref.make(0), snapshots }
     })
 
