@@ -11,7 +11,11 @@
       "@systemfsoftware/source"
     ],
     "emitDeclarationOnly": true,
-    "outDir": "node_modules/.cache/tsc/app"
+    "outDir": "node_modules/.cache/tsc/app",
+    "types": [
+      "node",
+      "vitest/importMeta"
+    ]
   },
   "include": [
     "src"

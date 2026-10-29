@@ -10,6 +10,10 @@
     "tsBuildInfoFile": "node_modules/.cache/tsconfig.tstyche.tsbuildinfo",
     "customConditions": [
       "@systemfsoftware/source"
+    ],
+    "types": [
+      "node",
+      "vitest/importMeta"
     ]
   },
   "include": [

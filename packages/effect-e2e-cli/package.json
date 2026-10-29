@@ -1,15 +1,15 @@
 {
   "name": "@systemfsoftware/effect-e2e-cli",
   "license": "Apache-2.0",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Ryan Lee <drdgvhbh@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/systemfsoftware/systemfsoftware.git",
-    "directory": "packages/runner/effect-e2e-cli"
+    "url": "git+https://github.com/systemfsoftware/effect-e2e.git",
+    "directory": "packages/effect-e2e-cli"
   },
-  "homepage": "https://github.com/systemfsoftware/systemfsoftware/tree/main/packages/runner/effect-e2e-cli#readme",
-  "bugs": "https://github.com/systemfsoftware/systemfsoftware/issues",
+  "homepage": "https://github.com/systemfsoftware/effect-e2e/tree/main/packages/effect-e2e-cli#readme",
+  "bugs": "https://github.com/systemfsoftware/effect-e2e/issues",
   "description": "The effect-e2e command line: `effect-e2e init` scaffolds a runnable @systemfsoftware/effect-e2e suite.",
   "keywords": [
     "effect",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@effect/platform-node": "catalog:",
-    "@systemfsoftware/effect-cell-types": "workspace:^",
+    "@systemfsoftware/effect-cell-types": "^12.0.2",
     "@systemfsoftware/effect-e2e": "workspace:^",
     "effect": "catalog:",
     "vitest": "catalog:"
@@ -48,13 +48,13 @@
   "devDependencies": {
     "@systemfsoftware/arethetypeswrong-cli": "catalog:",
     "@systemfsoftware/effect-e2e-web": "workspace:^",
-    "@systemfsoftware/effect-gherkin-spec": "workspace:^",
-    "@systemfsoftware/effect-schema-vite": "workspace:^",
-    "@systemfsoftware/oxlint-config-recommended": "workspace:^",
-    "@systemfsoftware/tsconfig": "workspace:^",
-    "@systemfsoftware/tsdown-config": "workspace:^",
-    "@systemfsoftware/vitest": "workspace:^",
-    "@systemfsoftware/vitest-config": "workspace:^",
+    "@systemfsoftware/effect-gherkin-spec": "^8.0.0",
+    "@systemfsoftware/effect-schema-vite": "^3.1.1",
+    "@systemfsoftware/oxlint-config-recommended": "^5.0.0",
+    "@systemfsoftware/tsconfig": "^2.0.2",
+    "@systemfsoftware/tsdown-config": "^0.1.1",
+    "@systemfsoftware/vitest": "^3.0.0",
+    "@systemfsoftware/vitest-config": "^0.1.1",
     "@types/node": "catalog:",
     "oxlint": "catalog:oxlint",
     "playwright": "catalog:",
@@ -64,7 +64,7 @@
   },
   "peerDependencies": {
     "@systemfsoftware/effect-e2e-web": "workspace:^",
-    "@systemfsoftware/vitest-config": "workspace:^",
+    "@systemfsoftware/vitest-config": "^0.1.1",
     "playwright": "catalog:"
   },
   "peerDependenciesMeta": {
