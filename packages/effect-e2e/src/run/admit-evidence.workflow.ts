@@ -8,18 +8,24 @@ import { RunStatus } from '../verdict/run-verdict.schema.js'
 
 const EvidenceAdmissionTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/EvidenceAdmission')
 
-export class AdmitEvidence extends Schema.TaggedClass<AdmitEvidence>()('AdmitEvidence', {
-  trace: Trace,
-  status: RunStatus,
-}) {
+export class AdmitEvidence
+  extends Schema.TaggedClass<AdmitEvidence, { readonly brand: unique symbol }>()('AdmitEvidence', {
+    trace: Trace,
+    status: RunStatus,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { trace: 'app.e2e.run.trace' } as const
 }
 
-export class EvidenceAdmitted extends Schema.TaggedClass<EvidenceAdmitted>()('EvidenceAdmitted', {}) {
+export class EvidenceAdmitted
+  extends Schema.TaggedClass<EvidenceAdmitted, { readonly brand: unique symbol }>()('EvidenceAdmitted', {})
+{
   readonly [EvidenceAdmissionTypeId] = EvidenceAdmissionTypeId
 }
 
-export class EvidenceDeclined extends Schema.TaggedClass<EvidenceDeclined>()('EvidenceDeclined', {}) {
+export class EvidenceDeclined
+  extends Schema.TaggedClass<EvidenceDeclined, { readonly brand: unique symbol }>()('EvidenceDeclined', {})
+{
   readonly [EvidenceAdmissionTypeId] = EvidenceAdmissionTypeId
 }
 

@@ -41,15 +41,19 @@ export const UnevaluableReason = Schema.Literals([
 ])
 export type UnevaluableReason = typeof UnevaluableReason.Type
 
-export class Holds extends Schema.TaggedClass<Holds>()('Holds', { evidence: Evidence }) {
+export class Holds
+  extends Schema.TaggedClass<Holds, { readonly brand: unique symbol }>()('Holds', { evidence: Evidence })
+{
   readonly [CheckEvaluateDecisionTypeId] = CheckEvaluateDecisionTypeId
 }
 
-export class DoesNotHold extends Schema.TaggedClass<DoesNotHold>()('DoesNotHold', { evidence: Evidence }) {
+export class DoesNotHold
+  extends Schema.TaggedClass<DoesNotHold, { readonly brand: unique symbol }>()('DoesNotHold', { evidence: Evidence })
+{
   readonly [CheckEvaluateDecisionTypeId] = CheckEvaluateDecisionTypeId
 }
 
-export class Unevaluable extends Schema.TaggedClass<Unevaluable>()('Unevaluable', {
+export class Unevaluable extends Schema.TaggedClass<Unevaluable, { readonly brand: unique symbol }>()('Unevaluable', {
   reason: UnevaluableReason,
   evidence: Evidence,
 }) {
@@ -59,12 +63,14 @@ export class Unevaluable extends Schema.TaggedClass<Unevaluable>()('Unevaluable'
 export const CheckEvaluateDecision = Schema.Union([Holds, DoesNotHold, Unevaluable])
 export type CheckEvaluateDecision = typeof CheckEvaluateDecision.Type
 
-export class CheckEvaluate extends Schema.TaggedClass<CheckEvaluate>()('CheckEvaluate', {
-  check: Check,
-  route: Route,
-  resolvedOn: Route,
-  located: Schema.Array(LocatorMatches),
-}) {
+export class CheckEvaluate
+  extends Schema.TaggedClass<CheckEvaluate, { readonly brand: unique symbol }>()('CheckEvaluate', {
+    check: Check,
+    route: Route,
+    resolvedOn: Route,
+    located: Schema.Array(LocatorMatches),
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

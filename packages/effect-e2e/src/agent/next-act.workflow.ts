@@ -124,7 +124,7 @@ export type ActTool = typeof ActTool.Type
 const NextActDecisionTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/NextActDecision')
 type NextActDecisionTypeId = typeof NextActDecisionTypeId
 
-export class Execute extends Schema.TaggedClass<Execute>()('Execute', {
+export class Execute extends Schema.TaggedClass<Execute, { readonly brand: unique symbol }>()('Execute', {
   callId: Schema.String,
   action: Action,
   located: Schema.Array(NodeRef),
@@ -133,28 +133,32 @@ export class Execute extends Schema.TaggedClass<Execute>()('Execute', {
   readonly [NextActDecisionTypeId] = NextActDecisionTypeId
 }
 
-export class Capture extends Schema.TaggedClass<Capture>()('Capture', { callId: Schema.String }) {
+export class Capture
+  extends Schema.TaggedClass<Capture, { readonly brand: unique symbol }>()('Capture', { callId: Schema.String })
+{
   readonly [NextActDecisionTypeId] = NextActDecisionTypeId
 }
 
-export class Done extends Schema.TaggedClass<Done>()('Done', {
+export class Done extends Schema.TaggedClass<Done, { readonly brand: unique symbol }>()('Done', {
   callId: Schema.String,
   summary: Schema.String,
 }) {
   readonly [NextActDecisionTypeId] = NextActDecisionTypeId
 }
 
-export class Correct extends Schema.TaggedClass<Correct>()('Correct', { reply: Message }) {
+export class Correct
+  extends Schema.TaggedClass<Correct, { readonly brand: unique symbol }>()('Correct', { reply: Message })
+{
   readonly [NextActDecisionTypeId] = NextActDecisionTypeId
 }
 
-export class Exhausted extends Schema.TaggedClass<Exhausted>()('Exhausted', {
+export class Exhausted extends Schema.TaggedClass<Exhausted, { readonly brand: unique symbol }>()('Exhausted', {
   budget: Schema.Literals(['steps', 'model-calls']),
 }) {
   readonly [NextActDecisionTypeId] = NextActDecisionTypeId
 }
 
-export class Unsupported extends Schema.TaggedClass<Unsupported>()('Unsupported', {
+export class Unsupported extends Schema.TaggedClass<Unsupported, { readonly brand: unique symbol }>()('Unsupported', {
   callId: Schema.String,
   capability: EngineCapability,
 }) {
@@ -164,7 +168,7 @@ export class Unsupported extends Schema.TaggedClass<Unsupported>()('Unsupported'
 export const NextActDecision = Schema.Union([Execute, Capture, Done, Correct, Exhausted, Unsupported])
 export type NextActDecision = typeof NextActDecision.Type
 
-export class NextAct extends Schema.TaggedClass<NextAct>()('NextAct', {
+export class NextAct extends Schema.TaggedClass<NextAct, { readonly brand: unique symbol }>()('NextAct', {
   answer: ModelAnswer,
   observation: Observation,
   capabilities: Schema.Array(EngineCapability),

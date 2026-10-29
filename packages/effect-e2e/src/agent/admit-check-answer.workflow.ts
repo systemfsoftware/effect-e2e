@@ -92,27 +92,33 @@ const AdmitCheckAnswerDecisionTypeId: unique symbol = Symbol.for(
 )
 type AdmitCheckAnswerDecisionTypeId = typeof AdmitCheckAnswerDecisionTypeId
 
-export class CheckAdmitted extends Schema.TaggedClass<CheckAdmitted>()('CheckAdmitted', {
-  check: Check,
-  callId: Schema.String,
-}) {
+export class CheckAdmitted
+  extends Schema.TaggedClass<CheckAdmitted, { readonly brand: unique symbol }>()('CheckAdmitted', {
+    check: Check,
+    callId: Schema.String,
+  })
+{
   readonly [AdmitCheckAnswerDecisionTypeId] = AdmitCheckAnswerDecisionTypeId
 }
 
-export class CheckRefused extends Schema.TaggedClass<CheckRefused>()('CheckRefused', {
-  replies: Schema.NonEmptyArray(Message),
-}) {
+export class CheckRefused
+  extends Schema.TaggedClass<CheckRefused, { readonly brand: unique symbol }>()('CheckRefused', {
+    replies: Schema.NonEmptyArray(Message),
+  })
+{
   readonly [AdmitCheckAnswerDecisionTypeId] = AdmitCheckAnswerDecisionTypeId
 }
 
 export const AdmitCheckAnswerDecision = Schema.Union([CheckAdmitted, CheckRefused])
 export type AdmitCheckAnswerDecision = typeof AdmitCheckAnswerDecision.Type
 
-export class AdmitCheckAnswer extends Schema.TaggedClass<AdmitCheckAnswer>()('AdmitCheckAnswer', {
-  answer: ModelAnswer,
-  observation: Observation,
-  refsOffered: Schema.Boolean,
-}) {
+export class AdmitCheckAnswer
+  extends Schema.TaggedClass<AdmitCheckAnswer, { readonly brand: unique symbol }>()('AdmitCheckAnswer', {
+    answer: ModelAnswer,
+    observation: Observation,
+    refsOffered: Schema.Boolean,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 

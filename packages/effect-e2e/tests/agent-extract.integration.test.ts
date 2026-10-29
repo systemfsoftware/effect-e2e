@@ -29,6 +29,7 @@ const Feature = makeFeature({ it })
 const INSTRUCTION = 'read the count from the screen'
 
 const SPEC_COUNT_JSON_SCHEMA = {
+  $schema: 'https://json-schema.org/draft/2020-12/schema',
   type: 'object',
   properties: { count: { type: 'number' } },
   required: ['count'],

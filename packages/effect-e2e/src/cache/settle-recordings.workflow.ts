@@ -49,7 +49,7 @@ export type RecordingOutcome = typeof RecordingOutcome.Type
 export const EntryWrite = Schema.Struct({ digest: KeyDigest, entry: TraceEntry })
 export type EntryWrite = typeof EntryWrite.Type
 
-export class Settled extends Schema.TaggedClass<Settled>()('Settled', {
+export class Settled extends Schema.TaggedClass<Settled, { readonly brand: unique symbol }>()('Settled', {
   outcomes: Schema.Array(RecordingOutcome),
   writes: Schema.Array(EntryWrite),
   deletes: Schema.Array(KeyDigest),
@@ -57,19 +57,21 @@ export class Settled extends Schema.TaggedClass<Settled>()('Settled', {
   readonly [SettleRecordingsTypeId] = SettleRecordingsTypeId
 }
 
-export class Untouched extends Schema.TaggedClass<Untouched>()('Untouched', {}) {
+export class Untouched extends Schema.TaggedClass<Untouched, { readonly brand: unique symbol }>()('Untouched', {}) {
   readonly [SettleRecordingsTypeId] = SettleRecordingsTypeId
 }
 
 export const SettleRecordingsDecision = Schema.Union([Settled, Untouched])
 export type SettleRecordingsDecision = typeof SettleRecordingsDecision.Type
 
-export class SettleRecordings extends Schema.TaggedClass<SettleRecordings>()('SettleRecordings', {
-  mode: CacheMode,
-  ending: AttemptEnding,
-  steps: Schema.Array(StepRecord),
-  staged: Schema.Array(StagedRecording),
-}) {
+export class SettleRecordings
+  extends Schema.TaggedClass<SettleRecordings, { readonly brand: unique symbol }>()('SettleRecordings', {
+    mode: CacheMode,
+    ending: AttemptEnding,
+    steps: Schema.Array(StepRecord),
+    staged: Schema.Array(StagedRecording),
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { mode: 'app.e2e.cache.settle-mode' } as const
 }
 

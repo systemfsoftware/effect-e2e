@@ -8,27 +8,39 @@ import { Count } from '../verdict/step-record.schema.js'
 const NextJudgmentDecisionTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/NextJudgmentDecision')
 type NextJudgmentDecisionTypeId = typeof NextJudgmentDecisionTypeId
 
-export class JudgmentPassed extends Schema.TaggedClass<JudgmentPassed>()('JudgmentPassed', {}) {
+export class JudgmentPassed
+  extends Schema.TaggedClass<JudgmentPassed, { readonly brand: unique symbol }>()('JudgmentPassed', {})
+{
   readonly [NextJudgmentDecisionTypeId] = NextJudgmentDecisionTypeId
 }
 
-export class JudgmentFailed extends Schema.TaggedClass<JudgmentFailed>()('JudgmentFailed', {}) {
+export class JudgmentFailed
+  extends Schema.TaggedClass<JudgmentFailed, { readonly brand: unique symbol }>()('JudgmentFailed', {})
+{
   readonly [NextJudgmentDecisionTypeId] = NextJudgmentDecisionTypeId
 }
 
-export class JudgmentInconclusive extends Schema.TaggedClass<JudgmentInconclusive>()('JudgmentInconclusive', {}) {
+export class JudgmentInconclusive
+  extends Schema.TaggedClass<JudgmentInconclusive, { readonly brand: unique symbol }>()('JudgmentInconclusive', {})
+{
   readonly [NextJudgmentDecisionTypeId] = NextJudgmentDecisionTypeId
 }
 
-export class JudgmentResolve extends Schema.TaggedClass<JudgmentResolve>()('JudgmentResolve', {}) {
+export class JudgmentResolve
+  extends Schema.TaggedClass<JudgmentResolve, { readonly brand: unique symbol }>()('JudgmentResolve', {})
+{
   readonly [NextJudgmentDecisionTypeId] = NextJudgmentDecisionTypeId
 }
 
-export class JudgmentPoll extends Schema.TaggedClass<JudgmentPoll>()('JudgmentPoll', {}) {
+export class JudgmentPoll
+  extends Schema.TaggedClass<JudgmentPoll, { readonly brand: unique symbol }>()('JudgmentPoll', {})
+{
   readonly [NextJudgmentDecisionTypeId] = NextJudgmentDecisionTypeId
 }
 
-export class JudgmentExhausted extends Schema.TaggedClass<JudgmentExhausted>()('JudgmentExhausted', {}) {
+export class JudgmentExhausted
+  extends Schema.TaggedClass<JudgmentExhausted, { readonly brand: unique symbol }>()('JudgmentExhausted', {})
+{
   readonly [NextJudgmentDecisionTypeId] = NextJudgmentDecisionTypeId
 }
 
@@ -42,14 +54,16 @@ export const NextJudgmentDecision = Schema.Union([
 ])
 export type NextJudgmentDecision = typeof NextJudgmentDecision.Type
 
-export class NextJudgment extends Schema.TaggedClass<NextJudgment>()('NextJudgment', {
-  mode: Schema.Literals(['assert', 'waitFor']),
-  source: Schema.Literals(['recorded', 'fresh']),
-  evaluation: Schema.Literals(['Holds', 'DoesNotHold', 'Unevaluable']),
-  changed: Schema.Boolean,
-  modelCalls: Count,
-  maxModelCalls: Count,
-}) {
+export class NextJudgment
+  extends Schema.TaggedClass<NextJudgment, { readonly brand: unique symbol }>()('NextJudgment', {
+    mode: Schema.Literals(['assert', 'waitFor']),
+    source: Schema.Literals(['recorded', 'fresh']),
+    evaluation: Schema.Literals(['Holds', 'DoesNotHold', 'Unevaluable']),
+    changed: Schema.Boolean,
+    modelCalls: Count,
+    maxModelCalls: Count,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {
     mode: 'app.e2e.agent.judgment-mode',
     evaluation: 'app.e2e.agent.judgment-evaluation',

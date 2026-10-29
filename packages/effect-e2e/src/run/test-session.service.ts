@@ -198,7 +198,7 @@ const launched = <A, E>(
     ])
     const fiber = yield* step(index).pipe(
       Effect.onExit(() => Ref.update(books.launches, marked(index, 'settled'))),
-      Effect.forkIn(books.steps),
+      Effect.forkIn(books.steps, { startImmediately: true }),
     )
     return { join: Effect.andThen(Ref.update(books.launches, marked(index, 'joined')), Fiber.join(fiber)) }
   })

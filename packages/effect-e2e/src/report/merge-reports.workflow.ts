@@ -19,27 +19,35 @@ import {
 
 const MergeReportsDecisionTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/MergeReportsDecision')
 
-export class MergeReports extends Schema.TaggedClass<MergeReports>()('MergeReports', {
-  partials: Schema.NonEmptyArray(Report1),
-}) {
+export class MergeReports
+  extends Schema.TaggedClass<MergeReports, { readonly brand: unique symbol }>()('MergeReports', {
+    partials: Schema.NonEmptyArray(Report1),
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = {} as const
 }
 
-export class ReportsMerged extends Schema.TaggedClass<ReportsMerged>()('ReportsMerged', { report: Report1 }) {
+export class ReportsMerged
+  extends Schema.TaggedClass<ReportsMerged, { readonly brand: unique symbol }>()('ReportsMerged', { report: Report1 })
+{
   readonly [MergeReportsDecisionTypeId] = MergeReportsDecisionTypeId
 }
 
-export class RunsDisagree extends Schema.TaggedClass<RunsDisagree>()('RunsDisagree', {
-  field: Schema.Literals(['id', 'project']),
-}) {
+export class RunsDisagree
+  extends Schema.TaggedClass<RunsDisagree, { readonly brand: unique symbol }>()('RunsDisagree', {
+    field: Schema.Literals(['id', 'project']),
+  })
+{
   readonly [MergeReportsDecisionTypeId] = MergeReportsDecisionTypeId
 }
 
-export class ResultsOverlap extends Schema.TaggedClass<ResultsOverlap>()('ResultsOverlap', {
-  test: TestId,
-  target: Schema.String,
-  agent: Schema.String,
-}) {
+export class ResultsOverlap
+  extends Schema.TaggedClass<ResultsOverlap, { readonly brand: unique symbol }>()('ResultsOverlap', {
+    test: TestId,
+    target: Schema.String,
+    agent: Schema.String,
+  })
+{
   readonly [MergeReportsDecisionTypeId] = MergeReportsDecisionTypeId
 }
 

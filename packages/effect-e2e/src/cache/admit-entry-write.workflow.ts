@@ -9,20 +9,28 @@ import { EntryWireBytes, entryWireUtf8Of, TraceEntry } from './entry.schema.js'
 
 const AdmitEntryWriteTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-e2e/AdmitEntryWrite')
 
-export class AdmitEntryWrite extends Schema.TaggedClass<AdmitEntryWrite>()('AdmitEntryWrite', {
-  mode: StoreMode,
-  entry: TraceEntry,
-}) {
+export class AdmitEntryWrite
+  extends Schema.TaggedClass<AdmitEntryWrite, { readonly brand: unique symbol }>()('AdmitEntryWrite', {
+    mode: StoreMode,
+    entry: TraceEntry,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { mode: 'app.e2e.cache.store-mode' } as const
 }
 
-export class WriteAdmitted extends Schema.TaggedClass<WriteAdmitted>()('WriteAdmitted', { bytes: EntryWireBytes }) {
+export class WriteAdmitted
+  extends Schema.TaggedClass<WriteAdmitted, { readonly brand: unique symbol }>()('WriteAdmitted', {
+    bytes: EntryWireBytes,
+  })
+{
   readonly [AdmitEntryWriteTypeId] = AdmitEntryWriteTypeId
 }
 
-export class WriteRefused extends Schema.TaggedClass<WriteRefused>()('WriteRefused', {
-  answer: Schema.Union([ReadOnly, Oversized]),
-}) {
+export class WriteRefused
+  extends Schema.TaggedClass<WriteRefused, { readonly brand: unique symbol }>()('WriteRefused', {
+    answer: Schema.Union([ReadOnly, Oversized]),
+  })
+{
   readonly [AdmitEntryWriteTypeId] = AdmitEntryWriteTypeId
 }
 

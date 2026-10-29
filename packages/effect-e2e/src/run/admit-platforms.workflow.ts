@@ -11,21 +11,25 @@ const AdmitPlatformsTypeId: unique symbol = Symbol.for('@systemfsoftware/effect-
 export const TestPlatform = Schema.Literals(['web', 'ios', 'android'])
 export type TestPlatform = typeof TestPlatform.Type
 
-export class AdmitPlatforms extends Schema.TaggedClass<AdmitPlatforms>()('AdmitPlatforms', {
-  declared: TestPlatform.pipe(Schema.NonEmptyArray, Schema.Option),
-  platform: TestPlatform,
-  target: Schema.String,
-}) {
+export class AdmitPlatforms
+  extends Schema.TaggedClass<AdmitPlatforms, { readonly brand: unique symbol }>()('AdmitPlatforms', {
+    declared: TestPlatform.pipe(Schema.NonEmptyArray, Schema.Option),
+    platform: TestPlatform,
+    target: Schema.String,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { platform: 'app.e2e.run.target-platform' } as const
 }
 
-export class Admitted extends Schema.TaggedClass<Admitted>()('Admitted', {}) {
+export class Admitted extends Schema.TaggedClass<Admitted, { readonly brand: unique symbol }>()('Admitted', {}) {
   readonly [AdmitPlatformsTypeId] = AdmitPlatformsTypeId
 }
 
-export class PlatformSkipped extends Schema.TaggedClass<PlatformSkipped>()('PlatformSkipped', {
-  reason: Schema.String,
-}) {
+export class PlatformSkipped
+  extends Schema.TaggedClass<PlatformSkipped, { readonly brand: unique symbol }>()('PlatformSkipped', {
+    reason: Schema.String,
+  })
+{
   readonly [AdmitPlatformsTypeId] = AdmitPlatformsTypeId
 }
 

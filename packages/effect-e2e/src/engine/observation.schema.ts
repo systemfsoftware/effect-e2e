@@ -17,10 +17,12 @@ export type Observation = typeof Observation.Type
 export const observationDepth = (observation: Observation): number =>
   observation.tree.reduce((deepest, root) => Math.max(deepest, semanticTreeDepth(root)), 0)
 
-export class TreeDepthExceeded extends Schema.TaggedError<TreeDepthExceeded>()('TreeDepthExceeded', {
-  budget: Schema.Int,
-  depth: Schema.Int,
-}) {
+export class TreeDepthExceeded
+  extends Schema.TaggedError<TreeDepthExceeded, { readonly brand: unique symbol }>()('TreeDepthExceeded', {
+    budget: Schema.Int,
+    depth: Schema.Int,
+  })
+{
   override get message(): string {
     return `the observed tree is ${this.depth} nodes deep; the budget is ${this.budget}`
   }

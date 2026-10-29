@@ -12,15 +12,15 @@ export type StoreMode = typeof StoreMode.Type
 export const InvalidReason = Schema.Literals(['unreadable', 'oversized', 'not-trace-1'])
 export type InvalidReason = typeof InvalidReason.Type
 
-export class Hit extends Schema.TaggedClass<Hit>()('Hit', { entry: TraceEntry }) {
+export class Hit extends Schema.TaggedClass<Hit, { readonly brand: unique symbol }>()('Hit', { entry: TraceEntry }) {
   readonly [CacheReadTypeId] = CacheReadTypeId
 }
 
-export class Miss extends Schema.TaggedClass<Miss>()('Miss', {}) {
+export class Miss extends Schema.TaggedClass<Miss, { readonly brand: unique symbol }>()('Miss', {}) {
   readonly [CacheReadTypeId] = CacheReadTypeId
 }
 
-export class Invalid extends Schema.TaggedClass<Invalid>()('Invalid', {
+export class Invalid extends Schema.TaggedClass<Invalid, { readonly brand: unique symbol }>()('Invalid', {
   reason: InvalidReason,
   message: Schema.String,
 }) {
@@ -49,6 +49,8 @@ export const CacheDeleteResult = Schema.Union([Deleted, ReadOnly]).pipe(Schema.t
 export type CacheDeleteResult = typeof CacheDeleteResult.Type
 
 /** The store's own medium failed: the disk refused a write, a rename or a removal. */
-export class CacheStorageFailed extends Schema.TaggedError<CacheStorageFailed>()('CacheStorageFailed', {
-  message: Schema.String,
-}) {}
+export class CacheStorageFailed
+  extends Schema.TaggedError<CacheStorageFailed, { readonly brand: unique symbol }>()('CacheStorageFailed', {
+    message: Schema.String,
+  })
+{}

@@ -85,17 +85,17 @@ export const ReplayStopReason = Schema.Union([
 ])
 export type ReplayStopReason = typeof ReplayStopReason.Type
 
-export class Miss extends Schema.TaggedClass<Miss>()('Miss', {}) {
+export class Miss extends Schema.TaggedClass<Miss, { readonly brand: unique symbol }>()('Miss', {}) {
   readonly [ReplayDecisionTypeId] = ReplayDecisionTypeId
 }
 
-export class Replayed extends Schema.TaggedClass<Replayed>()('Replayed', {
+export class Replayed extends Schema.TaggedClass<Replayed, { readonly brand: unique symbol }>()('Replayed', {
   actions: Schema.Array(Action),
 }) {
   readonly [ReplayDecisionTypeId] = ReplayDecisionTypeId
 }
 
-export class HandOff extends Schema.TaggedClass<HandOff>()('HandOff', {
+export class HandOff extends Schema.TaggedClass<HandOff, { readonly brand: unique symbol }>()('HandOff', {
   reason: ReplayStopReason,
   prefix: Schema.Array(Action),
 }) {
@@ -105,11 +105,13 @@ export class HandOff extends Schema.TaggedClass<HandOff>()('HandOff', {
 export const ReplayDecision = Schema.Union([Miss, Replayed, HandOff])
 export type ReplayDecision = typeof ReplayDecision.Type
 
-export class ClassifyReplay extends Schema.TaggedClass<ClassifyReplay>()('ClassifyReplay', {
-  mode: CacheMode,
-  entry: Schema.optionalKey(TraceEntry),
-  transcript: ReplayTranscript,
-}) {
+export class ClassifyReplay
+  extends Schema.TaggedClass<ClassifyReplay, { readonly brand: unique symbol }>()('ClassifyReplay', {
+    mode: CacheMode,
+    entry: Schema.optionalKey(TraceEntry),
+    transcript: ReplayTranscript,
+  })
+{
   static readonly [Workflow.InstrumentationBrand] = { mode: 'app.e2e.cache.replay-mode' } as const
 }
 
