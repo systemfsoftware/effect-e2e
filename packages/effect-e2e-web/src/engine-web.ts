@@ -1,7 +1,7 @@
 import type { WebEngineSpec } from '@systemfsoftware/effect-e2e'
 import type {
+  EngineCapability,
   Locator as EngineLocator,
-  LogEntry,
   Observation,
   ScreenshotRequest,
 } from '@systemfsoftware/effect-e2e/engine'
@@ -12,6 +12,7 @@ import {
   decodeObservation,
   Engine,
   EnvironmentUnavailable,
+  LogEntry,
   SemanticNode,
 } from '@systemfsoftware/effect-e2e/engine'
 import * as Effect from 'effect/Effect'
@@ -21,19 +22,24 @@ import * as Record from 'effect/Record'
 import * as Redacted from 'effect/Redacted'
 import * as Ref from 'effect/Ref'
 import * as Result from 'effect/Result'
+import * as Schedule from 'effect/Schedule'
 import * as Schema from 'effect/Schema'
 import * as SynchronizedRef from 'effect/SynchronizedRef'
-import { type Browser, chromium, firefox, type Page, webkit } from 'playwright'
+import { type Browser, type BrowserContext, chromium, firefox, type Page, webkit } from 'playwright'
 
 import { actOn, located } from './actions.js'
 import { semanticTreeOf } from './aria-tree.js'
 import { unreachable } from './failure.js'
-import { appended, consoleEntry, requestFailedEntry, responseEntries } from './logs.js'
+import { appended, consoleEntry, pageReportEntry, requestFailedEntry, responseEntries } from './logs.js'
+import { PAGE_REPORT_BINDING, type PageReportSent, reportPage } from './page-reporter.js'
 import { readOn } from './reads.js'
 import { routeOf } from './route.js'
 import { attempt, matchedAt, namingOf, type OpenSession, snapshotOf } from './session.js'
 
 export const WEB_CAPABILITIES = ['web', 'screenshot', 'vision', 'network', 'drag', 'frames'] as const
+
+const capabilitiesOf = (spec: WebEngineSpec): ReadonlyArray<EngineCapability> =>
+  spec.browser === 'chromium' ? [...WEB_CAPABILITIES, 'navigation-timing'] : WEB_CAPABILITIES
 
 export interface WebEngineOptions {
   readonly spec: WebEngineSpec
@@ -91,6 +97,35 @@ const closed = (session: Session): Effect.Effect<void> =>
     onSome: (open) => Effect.ignore(attempt(() => open.context.close())),
   })
 
+const REPORT_DELIVERY_TIMEOUT_MS = 5_000
+
+const hasReportsFor = (url: string) => (entries: ReadonlyArray<LogEntry>): boolean =>
+  entries.some((entry) => LogEntry.guards.Navigation(entry) && entry.url === url) &&
+  entries.some((entry) => LogEntry.guards.Reveal(entry) && entry.url === url)
+
+/** The page reporter delivers asynchronously; `open` returns only once the opened page's navigation and reveal are recorded. */
+const deliveredReports = (logs: Ref.Ref<ReadonlyArray<LogEntry>>, url: string): Effect.Effect<void> =>
+  Ref.get(logs).pipe(
+    Effect.map(hasReportsFor(url)),
+    Effect.repeat({ schedule: Schedule.spaced('25 millis'), until: (delivered) => delivered }),
+    Effect.timeoutOption(`${REPORT_DELIVERY_TIMEOUT_MS} millis`),
+    Effect.asVoid,
+  )
+
+const reporterInstalled = (context: BrowserContext, logs: Ref.Ref<ReadonlyArray<LogEntry>>) =>
+  Effect.gen(function*() {
+    const record = recordingInto(logs)
+    yield* attempt(() =>
+      context.exposeBinding(
+        PAGE_REPORT_BINDING,
+        (source, report: PageReportSent | undefined) => {
+          if (source.frame === source.page.mainFrame()) record(pageReportEntry(report))
+        },
+      )
+    )
+    yield* attempt(() => context.addInitScript(reportPage))
+  })
+
 const started =
   (browser: Browser, options: WebEngineOptions, snapshots: Ref.Ref<number>) =>
   (url: string): Effect.Effect<OpenSession, string> =>
@@ -100,10 +135,13 @@ const started =
       )
       context.setDefaultTimeout(ACTION_TIMEOUT_MS)
       context.setDefaultNavigationTimeout(NAVIGATION_TIMEOUT_MS)
-      const page = yield* attempt(() => context.newPage())
       const logs = yield* Ref.make<ReadonlyArray<LogEntry>>([])
+      const reports = capabilitiesOf(options.spec).includes('navigation-timing')
+      yield* Effect.when(reporterInstalled(context, logs), Effect.succeed(reports))
+      const page = yield* attempt(() => context.newPage())
       listened(page, logs)
       yield* attempt(() => page.goto(url)).pipe(Effect.tapError(() => Effect.ignore(attempt(() => context.close()))))
+      yield* Effect.when(deliveredReports(logs, page.url()), Effect.succeed(reports))
       return { context, page, logs, revision: yield* Ref.make(0), snapshots }
     })
 
@@ -170,7 +208,7 @@ export const layer = (options: WebEngineOptions): Layer.Layer<Engine, Environmen
           Effect.mapError(notOpen),
         )
       return Engine.of({
-        capabilities: WEB_CAPABILITIES,
+        capabilities: capabilitiesOf(options.spec),
         open: (url) =>
           SynchronizedRef.modifyEffect(session, opening(browser, options, snapshots, url)).pipe(
             Effect.flatMap(Effect.fromResult),
