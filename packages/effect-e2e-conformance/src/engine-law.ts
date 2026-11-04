@@ -109,7 +109,7 @@ const valueOf = (tree: ReadonlyArray<SemanticNode>, role: string, name: string):
 const redecodes = (observation: Observation): Effect.Effect<boolean> =>
   Schema.encodeEffect(Observation)(observation).pipe(
     Effect.flatMap(decodeObservation),
-    Effect.match({ onFailure: () => false, onSuccess: () => true }),
+    Effect.isSuccess,
   )
 
 const outcomeOf = <A, E extends EngineError>(
