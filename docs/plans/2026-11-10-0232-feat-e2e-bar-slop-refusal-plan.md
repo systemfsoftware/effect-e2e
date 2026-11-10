@@ -16,7 +16,7 @@ execution: code
 - **Means:** One refusal kernel, owned by `@systemfsoftware/vitest` and consumed here, drives generator test bodies whose checks reach the body only through the test's own callback (KTD1, KTD3).
 - **Product authority:** Linear SYS-1259 (its "Done when" and "Owner-approved exceptions") and the owner rulings recorded there. The bar is the skill that `e2e` 0.23.0 ships: `skills/e2e/SKILL.md` and `references/{writing-tests,agent,running}.md`.
 - **Active scope:** the web engine only. Mobile engines, explore and the MCP server are not active scope; SYS-1259 records them as later, separate work.
-- **Execution profile:** seventeen PRs, one in `systemfsoftware/systemfsoftware` and sixteen here. Each ends in a green `pnpm check:local`, is reviewed by fresh reviewers, and merges through the merge queue. The maker opens each PR and ce-work builds them in the order under Sequencing.
+- **Execution profile:** eighteen PRs, one in `systemfsoftware/systemfsoftware` and seventeen here. Each ends in a green `pnpm check:local`, is reviewed by fresh reviewers, and merges through the merge queue. The maker opens each PR and ce-work builds them in the order under Sequencing.
 - **Stop conditions:** stop and report when the fork's npm release needs operator approval, when the core pin bump brings a core change that breaks this repo, when an owner answer changes a requirement the next unit builds on, or when a unit's browser behaviour cannot be reached through Playwright.
 - **Open blockers:** none. Four owner questions are named switches under Owner-answer switches and do not hold planning. Two steps are gated: the fork's npm release (an external release) and the dependency vetting for each new third-party package.
 
@@ -75,10 +75,10 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 - R17. `app` provides `baseUrl`, `open`, `back`, `restart`, `clearState`, `screenshot`, `startRecording` and `stopRecording`, with the bar's failure behaviour.
 - R18. `screen` provides the bar's locator queries and options, strictness with `LOCATOR_AMBIGUOUS`, `filter`, `first`, `last`, `nth`, `or`, scoping, `visible`, scrolling to a locator, `tree` and `debug`.
 - R19. A test can act exactly: `tap`, `doubleTap`, `secondaryTap`, `longPress`, `fill` (text or secret), `pressSequentially`, `clear`, `press`, `check`, `uncheck`, `selectOption`, `focus`, `hover`, `setInputFiles`, `dragTo`, `scrollIntoView`, `swipe`, and the coordinate forms. A test can read as the bar's reads do, including `count` and `waitFor({ state })`.
-- R20. Checks cover the bar's locator, browser and value matcher tables, including `toHaveCount` and `toHaveURL`, list forms, `.not` with its hold rule, `soft`, `poll`, `toMatchSchema`, the asymmetric matchers, and the option flips. Screenshot comparison covers snapshot files, update mode, masking, automatic secure-field masking and per-target files.
+- R20. Checks cover the bar's locator, browser and value matcher tables, including `toHaveCount` and `toHaveURL`, list forms, `.not` with its hold rule, `soft`, `poll`, `toMatchSchema`, the asymmetric matchers, and the option flips. Screenshot comparison covers snapshot files, update mode, masking, automatic secure-field masking and per-target files; a secure field is a password input, including one filled with a secret handle, and no other input is masked, whatever was filled into it.
 - R21. The browser fixture provides navigation, page reads, raw locators, frame locators, `evaluate`, init scripts, routes with `fulfill`, `continue`, `fallback` and `abort`, `waitForResponse`, cookies, viewport, media emulation, dialogs, downloads, and raw keyboard and mouse.
-- R22. `test.extend` adds fixtures whose code after `use()` runs after a failing test too; a fixture applies only to tests registered through its own `test`. Fixture and hook bodies yield the same steps and checks as a test body, including a `request` step bound to `app.baseUrl` for API seeding and cleanup.
-- R23. Sign-in sessions work: a setup test saves a named session once, dependent tests declare it, setup runs when only a dependent test is selected, and the setup restrictions hold. Credentials and secrets are opaque handles, redacted from reports, step labels, and model input, and accepted only by `fill` and agent params.
+- R22. `test.extend` adds fixtures whose code after `use()` runs after a failing test too; a fixture applies only to tests registered through its own `test`. Fixture bodies yield the same steps and checks as a test body, including a `request` step bound to `app.baseUrl` for API seeding and cleanup; hook bodies yield the same steps and receive fixtures but no `expect`.
+- R23. Sign-in sessions work: a setup test saves a named session once, dependent tests declare it, setup runs when only a dependent test is selected, and the setup restrictions hold. Credentials and secrets are opaque handles, redacted from reports, step labels, and model input, and accepted only by `fill` and agent params; a credential password fills only password inputs (`POLICY_DENIED` anywhere else), while a `secrets.get` handle fills any editable input.
 - R24. The `platform` fixture is available in tests and hooks.
 
 **Agent and cache**
@@ -91,7 +91,7 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 - R27. A bar-parity profile in the private conformance suite exercises each behaviour in R11 through R26 through the public API against the web engine, and a table maps each taught behaviour to its evidence.
 - R28. The parity profile runs in CI's engine-suite lane, and `pnpm check:local` runs it at the local profile.
 - R29. The current API is removed in the same change set that replaces it: scaffolds, CLI `init` templates, package READMEs and fixtures migrate, and no old-API path or compatibility layer remains.
-- R30. The author-facing run rules of `references/running.md` that the web engine exercises (selection by file and line, tags, grep, last-failed and shard, the CI defaults, exit-code classes, trace pages, `report.json`) are available through the CLI and runner API.
+- R30. The author-facing run rules SYS-1259's Done-when puts in scope — the ones the three named bar files teach — are available through the CLI and runner API: selection by file and line, tags with `--tag-mode all` and `--exclude-tag`, grep, last-failed and shard, `--agent` with its per-agent semantics, `--headed`, `--action-timeout`, `--max-duration` (the run stops, the rest skip with cause `time-limit`, running tests end `interrupted`, exit 1), `--debug` (phase timings, the per-step table, step transcripts), `--update-snapshots` (`-u`), `--trace` and `--video` modes, the CI defaults, exit-code classes, trace pages and `report.json`. Run flags none of the three files teach are outside SYS-1259 and stay a named follow-up (under Scope Boundaries): `--changed-since`, `--repeat-each`, `--max-failures`, `--watch`, `--pass-with-no-tests`, `--assertion-timeout`, `--config`, and the `junit` and `markdown` reporters.
 - R31. A differential suite in the private conformance suite runs the same journeys under `e2e` 0.23.0 and under effect-e2e against the web engine, and compares each journey's verdict.
 
 ### Acceptance Examples
@@ -111,7 +111,7 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 ### Success Criteria
 
 - Each behaviour the three bar files teach has a row in the R27 table that names the public API and the test that proves it.
-- Each Goal slop shape fails `tsc` at the slop code with a message that names its rewrite, and a type-level test pins that.
+- Each Goal slop shape fails `tsc` at the slop code with a message that names its rewrite, and a type-level test pins that — except a shape in the proposed exception request, which is refused at run time until the owner decides in SYS-1259.
 - Each taught behaviour that a journey can exercise has a journey in the differential suite, and every journey's verdict matches `e2e`.
 - `pnpm check:local` passes on each PR's head, and each PR merges through the merge queue.
 - A reader of the compound `e2e-testing` pack can write its examples against this API without leaving the bar's taught behaviours.
@@ -121,6 +121,10 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 **Deferred for later (SYS-1259 records these as owner-approved)**
 
 - Mobile engines (iOS and Android), explore runs, and the MCP server.
+
+**Deferred to follow-up work (outside SYS-1259 by the owner's 2026-11-10 scope ruling)**
+
+- Run flags the three named bar files do not teach — they live in `references/running.md` and the other shipped references: `--changed-since` with the config `filters`, `--repeat-each`, `--max-failures`, `--watch`, `--pass-with-no-tests`, `--assertion-timeout`, `--config`, and the `junit` and `markdown` reporters. A later issue carries them; `--target` and `--output` exist today and need nothing.
 
 **Outside this work**
 
@@ -161,14 +165,14 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 
 ## Planning Contract
 
-**Product Contract preservation:** changed — R31, AE11, one Key Decision and one Success Criterion added at the owner's direction; the Means line, the Hooks Key Decision, the Summary's parity sentence and the Dependencies fork bullet reworded; the Goal Capsule gained the execution-profile and stop-condition bullets; Scope Boundaries gained one non-goal and Dependencies one dev-dependency bullet; the planning-deferred Outstanding Questions are resolved in the units below and removed; the fourth owner question added. The doc-review revision extended R9, R12, R15, R20, R22 and R26 in place (refusal class, refusal absorption, serial sharing, secure-field masking, fixture and hook bodies, the cache-retry rule); R1 through R30 and AE1 through AE10 are otherwise unchanged.
+**Product Contract preservation:** changed — R31, AE11, one Key Decision and one Success Criterion added at the owner's direction; the Means line, the Hooks Key Decision, the Summary's parity sentence and the Dependencies fork bullet reworded; the Goal Capsule gained the execution-profile and stop-condition bullets; Scope Boundaries gained one non-goal, one deferred-follow-up block and one dev-dependency bullet in Dependencies; the planning-deferred Outstanding Questions are resolved in the units below and removed; the fourth owner question added. The first doc-review revision extended R9, R12, R15, R20, R22 and R26 in place (refusal class, refusal absorption, serial sharing, secure-field masking, fixture and hook bodies, the cache-retry rule). The revision for the second doc review reworded R20 (secure-field masking rule), R22 (hook bodies yield steps, not checks) and R30 (scope named by the three Done-when bar files), extended the second Success Criterion with the exception-request carve-out, and added the dynamic-branch no-check shape to the proposed exception request; all other R and AE text is unchanged.
 
 ### Key Technical Decisions
 
 - KTD1. **The fork owns one refusal kernel and effect-e2e consumes it.** The fork exports the kernel (ledger, check brand, generator driver, refusal vocabulary, guard) on a new `kernel` subpath; effect-e2e adds `@systemfsoftware/vitest` as a runtime dependency and ships no second copy. A fork release and a core pin bump precede the first effect-e2e PR. Governs R1, R5, R6, R7, R8, R9. (session-settled: user-directed — chosen over a ported copy of the kernel in this repo: a second copy of the mechanism that refuses slop drifts from the original.)
 - KTD2. **The kernel takes its vocabulary as data.** Refusal tables, the observed-state reset predicate and custom `expect` subjects are parameters of the kernel, and the fork's own `it` lanes pass the fork's defaults. effect-e2e states its own weak-check table and its own locator subject, so an owner answer to a matcher question is a table row, not a fork change. Governs R5, R6, R20.
 - KTD3. **Steps are branded handles that launch when yielded, and fixtures expose no Promise.** A body's `yield*` operand is a branded step or check handle, never a bare Effect, so the generator's yield union cannot collapse to the widest `Effect` and a yielded `Effect.sleep` is a type error at the yield. The session's `launch`-and-`join` stays underneath: a body cannot fork a step (an `Effect.fork` result is not a yieldable handle), so `STEP_NOT_AWAITED` guards internal launches, and the ledger refuses a handle that is written and never yielded. Wait-class steps (`locator.waitFor`, `browser.waitForURL`, `waitForResponse`, `onDialog`, `waitForDownload`) arm before their trigger and join later, and an armed wait never joined is refused when the try ends. Hook bodies are generators too and receive fixtures without `expect`. Governs R1, R4, R7, R15.
-- KTD4. **A step declares whether it changes the observed state.** Opening a page, every exact action, navigation, agent `act`, agent `waitFor`, `locator.waitFor` and `browser.waitForURL` reset the window; reads, the `request` step, `agent.assert` and `agent.extract` do not. The waits are steps, not checks: they never satisfy the R3 no-check gate, so a body of `agent.act` followed only by `browser.waitForURL` fails that gate. The kernel's reset predicate reads that declaration. Governs R3, R5.
+- KTD4. **A step declares whether it changes the observed state.** Opening a page, every exact action, navigation and agent `act` reset the window; reads, the `request` step, `agent.assert`, `agent.extract` and the wait-class steps (`agent.waitFor`, `locator.waitFor`, `browser.waitForURL`) do not — a wait observes the page and cannot change it, so check, wait, check is still one observed state (R5). The waits are steps, not checks: they never satisfy the R3 no-check gate, so a body of `agent.act` followed only by `browser.waitForURL` fails that gate. The kernel's reset predicate reads that declaration. Governs R3, R5.
 - KTD5. **Each slop shape is refused where the compiler can see it, with the compiler's reach recorded per shape.** The decision matrix under High-Level Technical Design is the record; shapes `tsc` cannot reach are the proposed exception request under its own heading. Governs R2, R3, R4, R5, R7, R8, R9, R10, R15.
 - KTD6. **Exact checks record a step, and only locator checks confirm the cache.** Locator checks record `LocatorStep`, value checks record `ValueStep`, and `locator.waitFor` and `browser.waitForURL` record `LocatorStep`. `VERIFICATION_TAGS` in `src/cache/settle-recordings.workflow.ts` is unchanged, so a value check never confirms a recording, as the bar says. Today nothing in `src/runner` produces either record, so an `act` followed by a locator check cannot confirm a recording. Governs R3, R20, R26.
 - KTD7. **The engine SPI grows by extending its tagged unions and capability literals, and no engine operation ships without a law.** `Action`, `ReadRequest`, `LocatorExpression` and `EngineCapability` gain members; the web engine delegates to Playwright; `memoryEngine` and `engine-law.ts` grow in the same PR. Governs R17, R18, R19, R21, R23.
@@ -176,7 +180,7 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 - KTD9. **Strict mode is a cache option, and `--strict-cache` takes the bar's meaning.** `cache.strict` in the config and the `--strict-cache` flag turn a handed-off replay into `REPLAY_STALE`, let retries replay, and write nothing. The flag's current meaning (read-only) is removed. Governs R26. (session-settled: user-approved — chosen over keeping the read-only meaning beside a new flag: zero consumers, so no old meaning is kept.)
 - KTD10. **The browser fixture and `test` typed with it ship from `@systemfsoftware/effect-e2e-web`.** The core `test` is generic over fixtures; the web package supplies the browser-typed `test`, `describe` and hooks, as the bar's `@e2e-dev/web` does. A portable suite declares `requires: ['browser']`. Governs R21.
 - KTD11. **Sessions, credentials and secrets reach a body as fixtures.** `session`, `credentials` and `secrets` are callback-bound like `expect`, so no ambient module state carries a handle. The import location is surface syntax, not a taught behaviour. Governs R23.
-- KTD12. **The differential harness compares paired journeys through each runner's report.** Each journey has an `e2e` source and an effect-e2e source against one site, runs under `e2e run --reporter json` and `effect-e2e run`, and is compared on status, failure code and exit code, after U18 aligns effect-e2e's verdict statuses and exit-code rule with the bar's. `E2E_TELEMETRY_DISABLED=1` and `DO_NOT_TRACK=1` are set in the spawned environment. Governs R31. (session-settled: user-directed — inherits the label of the Key Decision on differential comparison.)
+- KTD12. **The differential harness compares paired journeys through each runner's report.** Each journey has an `e2e` source and an effect-e2e source against one site, runs under `e2e run --reporter json` and `effect-e2e run` — each journey in its own run, so the compared exit code is that journey's — and is compared on status, failure code and exit code. The verdict statuses and the exit-code rule are aligned with the bar's in P2 (U3), so P3 compares from its first journey set, and the later refused-class producers (`ONLY_IN_CI`, `COLLECTION_ERROR`, `REPLAY_STALE`) land with the units that originate those codes (U14, U17). `E2E_TELEMETRY_DISABLED=1` and `DO_NOT_TRACK=1` are set in the spawned environment. Governs R31. (session-settled: user-directed — inherits the label of the Key Decision on differential comparison.)
 - KTD13. **The decision-model and coding-agent executors are separate packages over a core `StepExecutor` seam.** `@systemfsoftware/effect-e2e-decision` and `@systemfsoftware/effect-e2e-acp` mirror the bar's `@e2e-dev/decision` and `@e2e-dev/acp`, so core keeps its two dependencies and each package's third-party dependencies pass the vetting rule in its PR body. Governs R25.
 - KTD14. **The cutover is atomic.** U3 and U4 land in one PR that removes the raw-Vitest `test` and hybrid `expect` and migrates every caller, so no old-API path exists on `main` at any commit. Governs R29.
 
@@ -211,7 +215,7 @@ Decision matrix: where each slop shape is refused. "Compiler's own" means `tsc` 
 | Shape | Requirement | `tsc`, our message | `tsc`, compiler's own | Run time only | Mechanism |
 |---|---|---|---|---|---|
 | Sync, `async` or Effect-returning body | R2 | yes | | backstop | `BodyRefusal` parameter union on `test` |
-| No exact check in the body | R3 | yes, at the test name | | backstop | Gate on yielded requirements |
+| No exact check in the body | R3 | yes, at the test name | | backstop | Gate on the requirements the test body yields |
 | Model judgment as the only check | R3 | yes, at the test name | | backstop | Judgments carry no `Asserted` requirement |
 | An Effect that is not an e2e step (`Effect.sleep`, a delay, a loop) yielded | R4 | | yes, at the yield | backstop | Branded step and check handles; an Effect is not a `yield*` operand, and the run-time brand gate names the rewrite |
 | `yield*` of a bare Promise, or `await` inside the generator | R4 | | yes | | A Promise is not iterable; `await` needs `async` |
@@ -240,7 +244,7 @@ Each question is carried as built-as-written. The table says what an answer woul
 
 | Question | Built until answered | An answer would change | Units touched |
 |---|---|---|---|
-| 1. The bar's multi-check example against R5 | R5 as written: one check per observed state; the bar's example file is transcribed as several tests | If a check may carry several facts: add a composite state check to R20 and a unit after U9; AE4 and R5 stand. If several checks per state are allowed: R5, AE4 and the R10 exception request change, and the kernel's window option is set to unbounded for locator checks | U1 option, U3, U9; R5, R10, AE4 |
+| 1. The bar's multi-check example against R5 | R5 as written: one check per observed state; the bar's example file is transcribed as several tests | If a check may carry several facts: add a composite state check to R20 and a unit after U9; AE4 and R5 stand. If several checks per state are allowed: R5, AE4 and the R10 exception request change, and the kernel's per-kind window limits are set `unbounded` for locator checks | U1 option, U3, U9; R5, R10, AE4 |
 | 2. `expect.soft` and `expect.poll` | Both are check kinds the ledger counts once, so R5 applies to them (U11 as written) | "Taught form": several soft checks on one state are allowed and kept, so soft checks stop counting against the window and U11 and R5's application to soft change. "Exception": delete U11 and drop both from R20. A different counting rule: one rule in U11 | U11; R5, R20, R10 |
 | 3. Run-time refusal for shapes `tsc` cannot reach | Every shape in the decision matrix is built as shown, and the exception request lists each non-compile shape with its reason | "Run time acceptable": the request collapses to one approval. "Each needs an exception": each request row is posted to SYS-1259 | none in code; R9, R10 |
 | 4. The five bar-listed weak value matchers | They stay available, R20 as written | "Refuse": add five rows to the e2e refusal table in U10 and invert their parity rows | U10; R6, R20 |
@@ -252,6 +256,7 @@ Each question is carried as built-as-written. The table says what an answer woul
 | Shape | Requirement | Why `tsc` cannot reach it | What refuses it instead |
 |---|---|---|---|
 | Several checks on one observed state | R5, R10 | A generator's yield type is the union of what it yields, with no order, so the number of checks between two steps is not a type. The fork refuses it at run time for the same reason. | The kernel ledger refuses the second check with the single-check rewrite, before the test continues. |
+| A check yielded only on a branch that never runs | R3 | The body's yield type is the unordered union over its branches, so a body whose only check sits on a branch that never executes types as checked. | The run-time gate ends the try with `BODY_REFUSED` (R9). |
 | A bare-Promise sleep (`yield*` of a Promise, `await` in the generator) | R4 | The compiler refuses the code, but with TypeScript's own message about iterators or `async`, which cannot name `waitFor`. | The compiler's refusal. A Promise yielded with `yield` is refused at the test name with our message. |
 | An Effect that is not an e2e step (`Effect.sleep`, a delay, a loop) yielded | R4 | The branded handle union rejects it at the yield with the compiler's own assignability message, which cannot name `waitFor` (KTD3). | The compiler's error at the yield; the run-time brand gate refuses it with the rewrite. |
 | State shared through a closure variable written in a hook | R15 | A closure write is invisible to types, and run-time detection needs the second run on a fresh build that the owner removed. | Typed hooks (no value channel; `beforeAll` and `afterAll` receive only the `request` step) and fresh fixtures per test outside serial groups, which refuse the visible forms. |
@@ -270,7 +275,7 @@ Each question is carried as built-as-written. The table says what an answer woul
 - `REPLAY_STALE` is a declared failure code with no producer, and `--strict-cache` maps to `read-only` (`packages/effect-e2e-cli/src/run/flags.ts`, `cacheValueOf`).
 - The engine's `Action` union already has `Tap`, `Fill`, `Type`, `Press`, `Select`, `Check`, `Hover`, `Drag`, `Swipe`, `SwipePath`, `TapAt`, `TypeAt`, `Screenshot` and `WaitFor`; `EngineShape.route` is the page route, not request interception.
 - `unique()` exists in `src/cache/key.schema.ts` and `onAction` exists on `act`; `onBeforeAction`, agent `tools`, an executor seam and agents other than `default` do not.
-- `@systemfsoftware/vitest` is a dev dependency at 3.0.0 through `.sfs-deps`; npm's latest is 2.0.0 and the fork's head is 4.0.1, so a fork release and pin bump are real work.
+- `@systemfsoftware/vitest` is a dev dependency at `^3.0.0` in all four package manifests; 22 test files import its `it` and two CLI modules import it dynamically. The fork's head is 4.0.1 and npm's latest published version is 2.0.0. The package's v3.0.0→v4.0.1 diff is nine files — the effect-tsgolint schema conformance refactor and the effect 4.1.2 requirement this repo already pins — with `src/mod.ts` and the `it`, check, driver, refusal and guard internals unchanged, so the kernel release rides the fork's 4.x line (an additive minor from head) and the pin bump here is a manifest-range edit, not a source migration.
 - CI runs the static lane and the affected tests on a pull request and on a merge-queue draft; `main` runs every package's whole suite and the browser engine suites (`test:engine`) (`.github/ci/pr-tests.mjs`, repo `AGENTS.md`). Changed engine tests run on a PR through the affected lane; unchanged browser surfaces are proven on `main`, so engine-bound proof is pending off-host until then.
 - `e2e` 0.23.0 is Apache-2.0, needs Node `^22.22.3 || >=24.8.0`, and `@e2e-dev/web` 0.15.5 pins `playwright-core` 1.64.1 against this repo's `playwright ^1.64.0`.
 - [Unverified] Vitest 5 retries per test, not per suite, so a serial group likely registers as one task; U14 verifies this first.
@@ -284,39 +289,46 @@ Each question is carried as built-as-written. The table says what an answer woul
 | P2 | effect-e2e | `feat(runner)!: generator test bodies on the check kernel` | U3, U4 | R1–R10, R14, R15, R16, R24, R29 | P1 |
 | P3 | effect-e2e | `test(conformance): differential harness against e2e 0.23.0` | U5 | R31 | P2 |
 | P4 | effect-e2e | `feat(runner): locator algebra, exact actions and reads` | U6, U7, U8 | R18, R19 | P2 |
-| P5 | effect-e2e | `feat(runner): the full check surface` | U9, U10, U11 | R5, R6, R20 | P4 |
+| P5 | effect-e2e | `feat(runner): the full check surface` | U9, U10 | R5, R6, R20 | P4 |
 | P6 | effect-e2e | `feat(web): browser fixture, pages and state` | U12 | R17, R20, R21 | P5 |
 | P7 | effect-e2e | `feat(web): browser fixture, network, dialogs and downloads` | U13 | R21 | P6 |
 | P8 | effect-e2e | `feat(runner): registration options and run rules` | U14 | R11–R14 | P2 |
 | P9 | effect-e2e | `feat(runner): extended fixtures and sign-in sessions` | U15, U16 | R22, R23 | P8, P4 |
 | P10 | effect-e2e | `feat(cache): strict-cache mode` | U17 | R26 | P2 |
-| P11 | effect-e2e | `feat(cli): selection by line, tag mode, grep and shard` | U18 | R30 | P8, P10 |
-| P12 | effect-e2e | `feat(agent): per-agent tests, tools, hooks and the executor seam` | U19 | R25 | P2 |
+| P11 | effect-e2e | `feat(cli): run flags, selection and list` | U18 | R30 | P6, P8, P10 |
+| P12 | effect-e2e | `feat(agent): per-agent tests, tools, hooks and the executor seam` | U19 | R25 | P8, P11 |
 | P13 | effect-e2e | `feat(decision): decision-model executor package` | U20 | R25 | P12 |
 | P14 | effect-e2e | `feat(acp): coding-agent executor package` | U21 | R25 | P12 |
-| P15 | effect-e2e | `feat(web): screenshot comparison, recording and video` | U22 | R6, R11, R17, R20 | P5, P6 |
+| P15 | effect-e2e | `feat(web): screenshot comparison, recording and video` | U22 | R6, R11, R17, R20 | P5, P6, P8 |
 | P16 | effect-e2e | `docs(conformance): bar coverage table and close-out` | U23 | R27, R28, R29 | all |
+| P17 | effect-e2e | `feat(runner): expect.soft and expect.poll` | U11 | R5, R20 | P5 |
 
 ```mermaid
 flowchart TB
   F1 --> P1 --> P2
   P2 --> P3
   P2 --> P4 --> P5 --> P6 --> P7
+  P5 --> P17
   P2 --> P8 --> P9
   P4 --> P9
   P2 --> P10
+  P6 --> P11
   P8 --> P11
   P10 --> P11
-  P2 --> P12 --> P13
+  P8 --> P12
+  P11 --> P12
+  P12 --> P13
   P12 --> P14
   P5 --> P15
   P6 --> P15
+  P8 --> P15
   P7 --> P16
   P9 --> P16
   P11 --> P16
   P13 --> P16
   P14 --> P16
   P15 --> P16
+  P17 --> P16
   P3 --> P16
 ```
 
@@ -339,17 +351,17 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 | U9 | Locator matchers | `src/runner/screen-expectation.ts` | U7, U8 |
 | U10 | Value matchers and weak-check table | `src/runner/check-table.ts` | U9 |
 | U11 | `soft` and `poll` | `src/runner/soft-poll.ts` | U10 |
-| U12 | Browser fixture, pages and state | `packages/effect-e2e-web/src/browser.ts` | U11 |
+| U12 | Browser fixture, pages and state | `packages/effect-e2e-web/src/browser.ts` | U10 |
 | U13 | Browser fixture, network and dialogs | `packages/effect-e2e-web/src/network.ts` | U12 |
 | U14 | Registration options and run rules | `src/runner/options.ts`, `vitest-runner.ts` | U4 |
 | U15 | Extended fixtures | `src/runner/extend.ts` | U14 |
 | U16 | Sessions, credentials, secrets | `src/runner/session-fixtures.ts` | U15, U8 |
 | U17 | Strict cache | `src/cache/classify-replay.workflow.ts`, CLI `flags.ts` | U4 |
-| U18 | CLI selection and `list` | `packages/effect-e2e-cli/src/run/*` | U14, U17 |
-| U19 | Agent surface completion | `src/agent/*`, `src/Config/config.schema.ts` | U4 |
+| U18 | CLI run flags, selection and `list` | `packages/effect-e2e-cli/src/run/*` | U12, U14, U17 |
+| U19 | Agent surface completion | `src/agent/*`, `src/Config/config.schema.ts` | U4, U14, U18 |
 | U20 | Decision-model executor package | `packages/effect-e2e-decision/` | U19 |
 | U21 | Coding-agent executor package | `packages/effect-e2e-acp/` | U19 |
-| U22 | Screenshots, recording and video | `src/runner/screenshot.ts`, web `recording.ts` | U11, U12 |
+| U22 | Screenshots, recording and video | `src/runner/screenshot.ts`, web `recording.ts` | U10, U12 |
 | U23 | Coverage table and close-out | conformance README, package READMEs | all |
 
 ### Phase: the kernel and the cutover (F1, P1, P2)
@@ -375,7 +387,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 2. Export from `kernel.ts`: `Asserted`, `Check`, `Ledger` with `makeLedger`, a check minter and `isCheck`, `drive`, `expectFor`, the types `Gate`, `RequirementOf`, `Body`, `BodyRefusal`, the refusal texts and their `this`-typed forms, and `installGuard`, `markTask`, `isMarked`.
 3. Turn the refusal tables (`refusedText`, `negatedText`, `neededText`) into parameters of `expectFor`; the fork's own lanes pass the current tables, so `it` behaviour does not change.
 4. Type the driver so steps and checks yield branded, non-Effect handles from their iterator, so a generator's yield union cannot collapse to the widest `Effect` (KTD3); `yield*` of `Effect.sleep` is a type error at the yield.
-5. Give `drive` a reset predicate; its default resets on every non-check yield, as today. Give the window an optional per-window check limit beside it, `unbounded` allowed and one as the default, so owner question 1 can be answered without a second fork release.
+5. Give `drive` a reset predicate; its default resets on every non-check yield, as today. Give the window an optional per-check-kind limit map beside it — consumer-supplied, `unbounded` allowed, one as the default for every kind — so owner questions 1 and 2 are answered by data, not by a second fork release.
 6. Give `expectFor` an ordered list of subjects (`matches(actual)`, `checks(actual, mint)`), typed so `expect(actual)` overloads merge.
 7. Leave `soft` and `poll` refused by default; a consumer table may replace them.
 8. Check whether the fork refuses an unyielded check at build time through its language-service diagnostic; if it does, export that check with the kernel so R7's exception row moves to compile time.
@@ -391,6 +403,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - A reset predicate that returns false for a read keeps one window across the read; a second check in it is refused.
 - Two subjects that both match: the first listed wins.
 - A window limit of 2 admits two checks in one window and refuses the third; `unbounded` admits them all.
+- Locator checks `unbounded` and value checks limited to one in one window: many locator checks pass and the second value check is refused.
 - A consumer check yielded inside a forked fiber still reaches the ledger.
 - `kernel` types compile for a consumer with no layer services: a body yielding one consumer check has no refusal at its name, and a body yielding none has the no-check refusal.
 - The fork's own `it` lanes pass their existing suites unchanged.
@@ -407,16 +420,17 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Files:**
 - `flake.nix`, `flake.lock`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`
-- `packages/effect-e2e/package.json`, `packages/effect-e2e-conformance/package.json`
+- `packages/effect-e2e/package.json`, `packages/effect-e2e-web/package.json`, `packages/effect-e2e-cli/package.json`, `packages/effect-e2e-conformance/package.json`
 
 **Approach:**
-1. Bump the `core` input to a full commit that carries the release; rebuild `.sfs-deps`; update every moved override version; run `pnpm install`.
-2. Move `@systemfsoftware/vitest` into core's `dependencies`; keep the dev dependency elsewhere.
-3. Stop and report if any other core package that moved breaks a build or a test.
+1. Bump the `core` input to a full commit that carries the kernel release on the fork's 4.x line (4.1.0, an additive minor from 4.0.1 head); rebuild `.sfs-deps`; update every moved override version; run `pnpm install`.
+2. Record the release-line finding in this PR's body: the fork's v3.0.0→v4.0.1 package diff carries no public-surface change, so `^3.0.0` → `^4.1.0` in the four manifests is a range edit and the 22 `it` imports and the two dynamic CLI imports need no source change.
+3. Move `@systemfsoftware/vitest` into core's `dependencies`; keep the dev dependency elsewhere.
+4. Stop and report if any other core package that moved breaks a build or a test.
 
-**Test expectation:** none -- dependency pin only; the proof is a green `pnpm check:local` with no source change.
+**Test expectation:** none -- dependency and manifest ranges only; the proof is a green `pnpm check:local` with no source change beyond the manifests.
 
-**Verification:** `pnpm check:local` passes and `pnpm why @systemfsoftware/vitest` names one version.
+**Verification:** `pnpm check:local` passes and `pnpm why @systemfsoftware/vitest` names one 4.x version.
 
 ### U3. Authoring surface on the kernel
 
@@ -429,19 +443,20 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 **Files:**
 - `packages/effect-e2e/src/runner/test-api.ts` (rewritten), `fixtures.ts`, `screen-expectation.ts`, `vitest-runner.ts`, `mod.ts`
 - `packages/effect-e2e/src/run/test-session.service.ts`
-- `packages/effect-e2e/src/runner/refusals.ts` (e2e rewrite texts), `src/verdict/failure.schema.ts`, `src/verdict/failure-class.schema.ts` (`HOOK_FAILED`, `BODY_REFUSED`)
-- Test: `packages/effect-e2e/tests/authoring.integration.test.ts`, `packages/effect-e2e/test-types/authoring.tst.ts`
+- `packages/effect-e2e/src/runner/refusals.ts` (e2e rewrite texts), `src/verdict/failure.schema.ts`, `src/verdict/failure-class.schema.ts` (`HOOK_FAILED`, `BODY_REFUSED`), `src/verdict/exit-code.ts`, `src/verdict/fold-run-verdict.workflow.ts`, `src/report/report.schema.ts` (the bar's `TestStatus`, including `flaky`, timed-out and `interrupted`, and the flaky summary count — the run-verdict alignment moves here from U18 so P2 lands it)
+- Test: `packages/effect-e2e/tests/authoring.integration.test.ts`, `packages/effect-e2e/test-types/authoring.tst.ts`, `packages/effect-e2e/src/__tests__/fold-run-verdict.workflow.property.test.ts`
 
 **Approach:**
 1. Register each test with Vitest through a marked wrapper that builds the try's ledger and drives the generator inside the try's fiber, with the session's services provided.
 2. Rebuild the fixtures as Effects over the session: `app.open`, the four `agent` calls, `screen` locator builders, `platform`, and `expect` from `expectFor` with the locator subject.
 3. Rewrite the eight existing matchers as locator checks that poll within `assertionTimeout` and record a `LocatorStep`; value checks record a `ValueStep` (KTD6).
-4. Declare which steps reset the window (KTD4): `open`, `act`, `waitFor`, `locator.waitFor` and `waitForURL` do; reads, `request`, `assert` and `extract` do not.
+4. Declare which steps reset the window (KTD4): `open`, every exact action, navigation and `act` do; reads, `request`, `assert`, `extract`, `agent.waitFor`, `locator.waitFor` and `waitForURL` do not.
 5. Give hooks generator bodies with fixtures and no `expect`, outer-first for `beforeEach` and inner-first for `afterEach`; a failing `beforeAll` is a `HOOK_FAILED` run error that skips its scope.
 6. Install the kernel guard in the `E2EVitestRunner` constructor and refuse unmarked tasks in `onBeforeRunTask`, with the effect-e2e rewrite text.
 7. Give `describe` a parameter whose return type refuses a Promise, so an `async` body fails at compile time.
 8. Run each body once; add no second-run lane.
 9. A run-time refusal — the no-check gate, a second check in a window, a written-never-yielded handle, an armed wait never joined — ends the try with `BODY_REFUSED` (R9): exit 2, not retried, not absorbed by `test.fail`.
+10. Align the run verdict with the bar's rule (moved from U18 so P3 compares from its first journeys): verdicts map to exits 0/1/3/4/130, the refused class exits 2 with `BODY_REFUSED` as its first producer, the highest code present wins under the bar's ordering (130 > 4 > 3 > 2 > 1 > 0), `TestStatus` gains `flaky`, timed-out and `interrupted`, and the run summary counts flaky tests — passed on retry.
 
 **Patterns to follow:** `src/run/admit-evidence.workflow.ts` for any pure decision; the existing `launched` and `join` in `test-session.service.ts`.
 
@@ -458,6 +473,10 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - A run-time refusal reports `BODY_REFUSED`, is not retried, and a `test.fail` body that draws it still fails.
 - Fixtures are new objects per test outside serial groups: state set on one in test A is absent in test B; two members of a serial group see the same fixture objects.
 - `beforeEach` runs outer-first and `afterEach` inner-first; a failing `beforeAll` skips its scope with `HOOK_FAILED`.
+- Check, `locator.waitFor` on an already-visible node, then a second check: the second check is refused; an `act` before the wait keeps both checks passing.
+- A run whose only refusal is `BODY_REFUSED` exits 2.
+- A test that passes on its retry is counted flaky in the summary and does not fail the run.
+- A run with both a failure and a refusal exits 2, the highest code present.
 - `platform` is readable in a test and in each hook.
 
 **Verification:** the authoring suite passes against the memory engine, and `pnpm --filter @systemfsoftware/effect-e2e test:types` passes.
@@ -510,7 +529,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 **Dependencies:** U4.
 
 **Files:**
-- `packages/effect-e2e-conformance/package.json` (dev dependencies `e2e` 0.23.0 and `@e2e-dev/web` 0.15.5, exact), `pnpm-lock.yaml`
+- `packages/effect-e2e-conformance/package.json` (dev dependencies `e2e` 0.23.0 and `@e2e-dev/web` 0.15.5, exact), `pnpm-workspace.yaml` (catalog `playwright` pin), `pnpm-lock.yaml`
 - `packages/effect-e2e-conformance/src/compare-verdicts.workflow.ts`
 - `packages/effect-e2e-conformance/tests/differential.integration.test.ts`, `packages/effect-e2e-conformance/vitest.config.ts` (add to `BROWSER_TESTS`)
 - `packages/effect-e2e-conformance/tests/__fixtures__/differential/` (journey table, `e2e` config, paired suites, reuse of the heading and law sites)
@@ -518,10 +537,10 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Approach:**
 1. Define a journey as a name, an `e2e` source, an effect-e2e source and the site it opens.
-2. Spawn `e2e run --reporter json` and `effect-e2e run` per suite with isolated output directories and `E2E_TELEMETRY_DISABLED=1` and `DO_NOT_TRACK=1`.
-3. Compare each journey's status, failure code and exit code through a pure `compareVerdicts` workflow.
+2. Spawn `e2e run --reporter json` and `effect-e2e run` once per journey, each journey with its own output directory, with `E2E_TELEMETRY_DISABLED=1` and `DO_NOT_TRACK=1`.
+3. Compare each journey's status, failure code and exit code through a pure `compareVerdicts` workflow; the compared exit code is the journey's own because each journey runs alone.
 4. Start with journeys for opening and a heading check, a missing locator, an ambiguous locator, a wrong text, a skip and a retried failure; later PRs append journeys for their behaviours.
-5. Check that `pnpm why playwright-core` resolves `1.64.1` beside the repo's `playwright`, so one Chromium revision serves both runners; pin if it does not.
+5. Bump the catalog `playwright` to exactly `1.64.1` in this PR so both runners resolve one `playwright-core` revision and one Chromium; never override `@e2e-dev/web`'s pin.
 6. Put the dependency vetting for `e2e` and `@e2e-dev/web` in the PR body: registry maintainers and publish provenance, download counts, source contributors, and real dependents.
 
 **Execution note:** write the comparison workflow and its property test first; the browser journeys come after.
@@ -531,6 +550,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 **Test scenarios:**
 - Equal reports yield no difference; changing any one compared field yields a difference that names that field.
 - A deliberately divergent journey pair makes the differential run fail naming the journey and the field (AE11).
+- Two journeys that differ only in exit code are each reported against their own journey.
 - A journey that fails identically under both runners passes the comparison.
 - The spawned `e2e` process sends no telemetry request.
 
@@ -594,7 +614,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 1. Add `DoubleTap`, `SecondaryTap`, `LongPress`, `Clear`, `Focus`, `SetInputFiles`, `ScrollIntoView` and `ScrollUntilVisible`, and give `Tap` modifiers and a position.
 2. Expose each as a step method on a locator: `tap`, `doubleTap`, `secondaryTap`, `longPress`, `fill`, `pressSequentially`, `clear`, `press`, `check`, `uncheck`, `selectOption`, `focus`, `hover`, `setInputFiles`, `dragTo`, `scrollIntoView`, `swipe`, plus `screen.tapAt` and `screen.swipe`.
 3. Each action waits for readiness up to `actionTimeout`, performs one thing, resets the window, and records an `ActionStep`.
-4. `fill` takes text or a secret handle; `pressSequentially` refuses a secret with `INVALID_ARGUMENT`; `selectOption` takes one option and refuses an array; `modifiers` with `position` is `INVALID_ARGUMENT`; `setInputFiles` resolves paths from the project root and refuses a path outside it or a hidden one with `POLICY_DENIED`.
+4. `fill` takes text or a secret handle, and a credential password (`credentials.user(name).password`) fills only password inputs — anything else is `POLICY_DENIED` (R23); a `secrets.get` handle fills any editable input. `pressSequentially` refuses a secret with `INVALID_ARGUMENT`; `selectOption` takes one option and refuses an array; `modifiers` with `position` is `INVALID_ARGUMENT`; `setInputFiles` resolves paths from the project root and refuses a path outside it or a hidden one with `POLICY_DENIED`.
 5. Update every exhaustive match over `Action` (`act.ts`, `recorded-flow.workflow.ts`, `entry.schema.ts`, the web and memory engines); the agent keeps its own tool vocabulary.
 
 **Patterns to follow:** the existing `Fill` with its secret references; `ActionRecord` in `step-record.schema.ts`.
@@ -602,6 +622,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 **Test scenarios:**
 - Each action changes the memory site as expected, and the report holds one `ActionStep` per call.
 - `fill` with a registered secret writes the value and the report shows `<secret:name>`.
+- A credential password filled into a plain textbox fails `POLICY_DENIED`; the same handle into a password input fills.
 - `pressSequentially` with a secret fails `INVALID_ARGUMENT`.
 - `selectOption(['a','b'])` fails `INVALID_ARGUMENT`.
 - `tap({ position, modifiers })` fails `INVALID_ARGUMENT`.
@@ -628,7 +649,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 **Approach:**
 1. Build `textContent`, `inputValue`, `getAttribute`, `isEnabled`, `isDisabled`, `isChecked` and `boundingBox` over `read`: wait for one match until `actionTimeout`, then read once.
 2. Build `isVisible`, `isHidden`, `count`, `all` and `allTextContents` over `query`: they answer at once and return `[]` or `0` at zero.
-3. Build `locator.waitFor({ state })` over the engine's `WaitFor` action; record it as a `LocatorStep`, so it confirms a recording; it is a step that resets the window, never a check for R3 (KTD4), and it arms and joins like the other wait-class steps (KTD3).
+3. Build `locator.waitFor({ state })` over the engine's `WaitFor` action; record it as a `LocatorStep`, so it confirms a recording; it is a step that keeps the window, never a check for R3 (KTD4), and it arms and joins like the other wait-class steps (KTD3).
 4. Build `screen.tree()` and `screen.debug()` over `observe`; both read once without waiting.
 5. Reading a password field's value or attributes fails `POLICY_DENIED`. Reads keep the window.
 
@@ -748,20 +769,20 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Requirements:** R17, R20, R21; KTD7, KTD10.
 
-**Dependencies:** U11.
+**Dependencies:** U10.
 
 **Files:**
 - `packages/effect-e2e-web/src/browser.ts` (new), `src/mod.ts`, `src/engine-web.ts`, `src/session.ts`
-- `packages/effect-e2e/src/engine/engine.service.ts`, `capability.schema.ts`, `memory-engine.ts`
+- `packages/effect-e2e/src/engine/engine.service.ts`, `capability.schema.ts`, `memory-engine.ts`, `src/Config/config.schema.ts` (`headed`)
 - `packages/effect-e2e/src/runner/fixtures.ts`, `screen-expectation.ts`, `src/run/test-session.service.ts`
 - `packages/effect-e2e-conformance/src/engine-law.ts`, `tests/web-engine-law.integration.test.ts`
 - Test: `packages/effect-e2e/tests/browser-fixture.integration.test.ts`
 
 **Approach:**
-1. Add a `browser` capability and the engine operations for `goto`, `reload`, `back`, `forward`, `url`, `title`, `waitForURL`, raw `locator(css)`, `frameLocator(css)`, `evaluate`, `addInitScript`, `cookies`, `setCookies`, `clearCookies`, `setViewport`, `emulateMedia`, `keyboard` and `mouse`.
+1. Add a `browser` capability and the engine operations for `goto`, `reload`, `back`, `forward`, `url`, `title`, `waitForURL`, raw `locator(css)`, `frameLocator(css)`, `evaluate`, `addInitScript`, `cookies`, `setCookies`, `clearCookies`, `setViewport`, `emulateMedia`, `keyboard` and `mouse`; the engine takes a `headed` run option and the web engine launches visible when it is set (the `--headed` flag decode is U18's).
 2. Export a browser-typed `test`, `describe` and hooks from `@systemfsoftware/effect-e2e-web`; a test that uses `browser` there declares `requires: ['browser']` or runs on a browser target.
 3. Add `app.baseUrl`, `back`, `restart` and `clearState`, each with the bar's failure behaviour.
-4. Add `toHaveURL` (base-relative or RegExp, `ignoreCase`), `toHaveTitle` and `toHaveClass`; `waitForURL` records a `LocatorStep` and is a step that resets the window, never a check for R3 (KTD4); wait-class steps arm before their trigger and join later (KTD3).
+4. Add `toHaveURL` (base-relative or RegExp, `ignoreCase`), `toHaveTitle` and `toHaveClass`; `waitForURL` records a `LocatorStep` and is a step that keeps the window, never a check for R3 (KTD4); wait-class steps arm before their trigger and join later (KTD3).
 5. `evaluate` takes JSON in and out, and a page-side throw is `EVALUATE_FAILED`.
 
 **Test scenarios:**
@@ -775,6 +796,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - `emulateMedia({ colorScheme: 'dark' })` changes a `prefers-color-scheme` query before `app.open`.
 - `app.clearState()` leaves no cookies or storage and reopens the base URL; `app.restart()` keeps persisted state.
 - A browser fixture on a non-browser target is a type error, and `requires: ['browser']` skips the test there.
+- A run with `headed` set reaches the engine's launch options as headless false (web engine, off-host).
 
 **Verification:** the fake passes the new laws locally; the web engine passes them off-host.
 
@@ -796,7 +818,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 1. Add `route` and `unroute`, with newest route first, `route.fetch`, and a handler that calls exactly one of `fulfill`, `continue`, `fallback` or `abort`; none or two fails the next step with `ACTION_FAILED`, and an unsupported option is `INVALID_ARGUMENT`.
 2. Add `unrouteAll`, `waitForResponse`, `onDialog`, `waitForDownload` and `waitForDownloads`; the wait-class steps arm before their trigger and join later (KTD3): `yield* begin(browser.waitForResponse('**/api'))`, then `yield* app.open('/x')`, then `yield* joined.join()` reads the body. An armed wait never joined is refused when the try ends. `onDialog` is awaited and resolves to an unsubscribe; an unanswered dialog fails the next step with `INVALID_STATE`; body readers reject with `ACTION_FAILED` when unreadable.
 3. Patterns are glob strings or RegExp matched against the full URL; a predicate function is `INVALID_ARGUMENT`.
-4. Configured site headers stay through `continue` and `unrouteAll`.
+4. Configured site headers are attached only to requests whose origin equals `app.baseUrl`'s origin — injected per request through the route layer, not context-wide `extraHTTPHeaders` — and they persist through `continue`, `fallback` and `unrouteAll`. An engine law pins it: a navigation and a subresource request to another origin carry none of the configured headers (the app's deployment-protection tokens never reach another site, however the URL was chosen).
 
 **Test scenarios:**
 - A route that fulfils JSON answers the page's request and the page shows it.
@@ -806,6 +828,8 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - `onDialog('accept')` registered before a tap accepts a `confirm`; with no handler the next step fails `INVALID_STATE`.
 - `waitForDownload(() => tap)` returns `suggestedFilename` and a readable `absolutePath`.
 - A predicate pattern is `INVALID_ARGUMENT`.
+- A navigation and a subresource request to another origin carry none of the configured site headers; a request to `app.baseUrl`'s origin keeps them through `continue` and `unrouteAll`.
+- A cookie value and an `evaluate` result appear in no report field, trace line or model input.
 
 **Verification:** as U12.
 
@@ -828,9 +852,9 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - Test: `packages/effect-e2e/tests/registration.integration.test.ts`, `packages/effect-e2e/src/run/__tests__/admit-requirements.workflow.property.test.ts`, `packages/effect-e2e-conformance/tests/__fixtures__/runner-suite/tests/`
 
 **Approach:**
-1. Decode the options with the bar's bounds: distinct non-blank `tags` with no comma or edge whitespace and a union across layers, `retries` 0 to 10, `skip` and `fail` as a flag or reason, `platforms`, `requires`, `session`, `agentContext`, `agent`, `trace`, `video`.
+1. Decode the options with the bar's bounds: distinct non-blank `tags` with no comma or edge whitespace and a union across layers, `retries` 0 to 10, `timeout` (the test timeout, default `config.timeout`, covering `beforeEach` and the body), `skip` and `fail` as a flag or reason, `platforms`, `requires`, `session`, `agentContext`, `agent`, `trace`, `video`.
 2. `test.skip` works bare and from the body before the first step; `test.fail` passes on a test failure or timeout and fails `UNEXPECTED_PASS` on a pass; an infrastructure error still fails; a setup test cannot skip or fail.
-3. `test.only` is refused in CI with `ONLY_IN_CI`; an `async` `describe` body is a `COLLECTION_ERROR` at run time.
+3. `test.only` is refused in CI with `ONLY_IN_CI` and an `async` `describe` body is a `COLLECTION_ERROR` at run time, both folding into the refused class at exit 2 (U3's classes).
 4. `requires` admits a test by engine capability through a pure workflow; a missing capability skips the test at selection.
 5. A serial group runs its members in order on one worker and retries as a whole, sharing one fixture chain per group (R15); members take the group's `trace` and `video`; the restricted options are refused; nested serial is a `COLLECTION_ERROR`.
 
@@ -843,7 +867,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - `retries: 11` is refused; a test-level `retries` wins over the flag.
 - `test.skip('waiting on the API')` from the body reports skipped with that reason; a skip after the first step is refused.
 - `test.fail` on a failing body passes; on a passing body fails `UNEXPECTED_PASS` (AE7); on an engine failure still fails.
-- `test.only` passes locally and fails `ONLY_IN_CI` with `CI` set (AE6).
+- `test.only` passes locally and fails `ONLY_IN_CI` with `CI` set, exiting 2 (AE6).
 - An `async` `describe` is a `COLLECTION_ERROR`.
 - A test with `requires: ['browser']` on a target without it is skipped, not failed.
 - A serial group's member two fails, and the retry reruns member one again.
@@ -869,7 +893,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 2. Fixtures set up for every test registered through the extended `test`, destructured or not; within a serial group the chain is created once per group and shared by its members (R15).
 3. Teardown runs in reverse order after the body and `afterEach`, after a failure and after a timeout.
 4. A `test.extend` chain registers hooks that see its fixtures; a fixture is visible only to tests registered through its own `test`.
-5. A fixture body is a generator over the same steps and checks as a test body (R22); its checks count in the try's ledger window like the body's, and a fixture check satisfies the R3 gate.
+5. A fixture body is a generator over the same steps and checks as a test body (R22); each fixture's setup and each fixture's teardown run in their own ledger window — separate from the body's and from every other fixture's — so seeding fixtures do not spend the body's window and a teardown check after the body's last check is admitted. `request` still resets no window (KTD4). Fixture checks never satisfy the R3 no-check gate: only the checks the test body yields count for it.
 6. Add the `request` step bound to `app.baseUrl`: `request('POST', '/api/projects', { body })` returns parsed JSON; it changes no screen state, so it does not reset the window, and it records no step. Hooks receive it where page-carrying fixtures are withheld.
 
 **Test scenarios:**
@@ -880,6 +904,9 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - A failing fixture setup fails the test and still runs the teardown of fixtures already set up.
 - A fixture seeds through `request`, checks the seed with a value check, and deletes it after `use()` (AE8).
 - A second check in a fixture's window is refused (R5).
+- Two seeding fixtures, each with one value check, both pass — each check in its own window.
+- A teardown check after a body whose last yield is a check passes.
+- A body that yields no check of its own, on a fixture that yields a check, is refused at the test name (R3).
 
 **Verification:** `pnpm --filter @systemfsoftware/effect-e2e test:types` and the integration test pass; the fixture and teardown journeys join the parity profile (R27) and run in the `test:engine` lane.
 
@@ -899,10 +926,10 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - Test: `packages/effect-e2e/tests/sessions.integration.test.ts`, `packages/effect-e2e-conformance/tests/web-engine-law.integration.test.ts`
 
 **Approach:**
-1. Add engine operations to save and restore a named session: cookies, local storage and IndexedDB, through Playwright's storage state; the state is held encrypted for one run and removed at cleanup. The per-run key is generated in global setup and handed to workers in memory through the existing run-scoped `project.provide` channel (`RUN_ID_KEY`'s pattern in `global-setup.ts`); it is never written beside the ciphertext.
+1. Add engine operations to save and restore a named session: cookies, local storage and IndexedDB, through Playwright's storage state saved with `indexedDB: true` (without it IndexedDB is not captured); the state is held encrypted for one run and removed at cleanup. The per-run key is generated in global setup and handed to workers in memory through the existing run-scoped `project.provide` channel (`RUN_ID_KEY`'s pattern in `global-setup.ts`); it is never written beside the ciphertext.
 2. `test.setup(name, { sessions: ['admin'] }, body)` runs once per target when any selected test declares the session, even when only the dependent test is selected; exactly one setup saves a name and the body saves each declared name once, else `SESSION_CONTRACT`.
 3. Session names match `[A-Za-z0-9_.-]{1,128}`; a setup test cannot skip or `fail`.
-4. `credentials.user(name)` and `secrets.get(name)` arrive as fixtures; the password is an opaque handle accepted by `fill` and agent params only, redacted by name from the report, step labels, model input and the test id.
+4. `credentials.user(name)` and `secrets.get(name)` arrive as fixtures; the password is an opaque handle accepted by `fill` and agent params only — and there only into password inputs (`POLICY_DENIED` elsewhere, U7's rule) — redacted by name from the report, step labels, model input and the test id.
 5. Environment overrides follow the existing `secret` and `credential` env names in config.
 
 **Test scenarios:**
@@ -930,7 +957,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 **Dependencies:** U4.
 
 **Files:**
-- `packages/effect-e2e/src/Config/config.schema.ts`, `src/Config/run-overrides.ts`, `src/cache/classify-replay.workflow.ts`, `src/agent/act.ts`, `src/runner/wiring.ts`
+- `packages/effect-e2e/src/Config/config.schema.ts`, `src/Config/run-overrides.ts`, `src/cache/classify-replay.workflow.ts`, `src/agent/act.ts`, `src/runner/wiring.ts`, `src/verdict/failure-class.schema.ts` (`REPLAY_STALE` joins the refused class)
 - `packages/effect-e2e-cli/src/run/flags.ts`, `run.command.ts`
 - Test: `packages/effect-e2e/src/cache/__tests__/classify-replay.workflow.property.test.ts`, `packages/effect-e2e/tests/strict-cache.integration.test.ts`, `packages/effect-e2e-cli/src/run/flags.ts` (in-source tests)
 
@@ -938,7 +965,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 1. Add `cache.strict` to the config and a run override; strict implies no writes.
 2. In `act`, a `HandedOff` replay under strict fails with `REPLAY_STALE` carrying the stop reason; a step with no entry (`Missed`) still runs live.
 3. Couple the cache lookup to the attempt index: attempt 1 behaves as today; a retry replays the recording only under strict, and outside strict a retry's agent steps run live and re-record (R26). Today nothing couples the lookup to the attempt (the `keyingOf`/`looked` cache reads in `act.ts` ignore it), so this is new code, not a confirmation.
-4. Make `--strict-cache` set the strict option, and remove its mapping to `read-only`; keep `--no-cache` and refuse the two together as today.
+4. Make `--strict-cache` set the strict option, and remove its mapping to `read-only`; keep `--no-cache` and refuse the two together as today. Reclass `REPLAY_STALE` into the refused class (U3's alignment), so a run whose only refusal is a stale replay exits 2.
 
 **Patterns to follow:** the existing `HandedOff` and `Missed` branches in `act.ts` (`stagedAfter`).
 
@@ -949,30 +976,33 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - A retry outside strict mode runs the agent step live instead of replaying.
 - Without strict, a handed-off replay still reaches the model, as today.
 - `--strict-cache` sets `cache.strict`; it no longer selects `read-only`; with `--no-cache` it is refused.
+- A run whose only refusal is a stale replay exits 2.
 - The decision workflow returns `REPLAY_STALE` for every hand-off reason and `Missed` for no entry (property test).
 
 **Verification:** the property and integration tests pass locally; the strict-cache journey joins the parity profile (R27) and runs in the `test:engine` lane.
 
-### U18. CLI selection and `list`
+### U18. CLI run flags, selection and `list`
 
-**Goal:** the CLI selects tests as `references/running.md` describes and previews the selection.
+**Goal:** the CLI selects tests as the bar teaches, takes the run flags the three named bar files teach, and previews the selection.
 
 **Requirements:** R30.
 
-**Dependencies:** U14, U17.
+**Dependencies:** U12, U14, U17.
 
 **Files:**
 - `packages/effect-e2e-cli/src/run/flags.ts`, `run.command.ts`, `selection.schema.ts`, `run.ts`, `last-failed.ts`
 - `packages/effect-e2e-cli/src/list/list.command.ts` (new), `cli.ts`
 - `packages/effect-e2e/src/runner/test-files.ts`
-- `packages/effect-e2e/src/verdict/exit-code.ts`, `src/verdict/fold-run-verdict.workflow.ts`, `src/verdict/failure-class.schema.ts`, `src/report/report.schema.ts`
+- `packages/effect-e2e/src/Config/config.schema.ts` (`maxDuration`), `src/Config/run-overrides.ts`, `src/runner/vitest-runner.ts`, `src/verdict/failure.schema.ts` (`RUN_TIMEOUT`)
 - Test: `packages/effect-e2e-cli/tests/selection.integration.test.ts`, `packages/effect-e2e-conformance/tests/cli-run.integration.test.ts`
 
 **Approach:**
 1. Accept `file:line` (the test whose registration opens on that line, with a `NO_TESTS` error listing the lines when stale), a bare name, and repeated `--tag` with `--tag-mode all`, `--exclude-tag`, `--grep` and `--grep-invert` over the joined title, and `--shard index/total` (contiguous, serial groups whole).
 2. Add `effect-e2e list` taking the same selection and printing one line per test and target with its skip reason, starting no engine.
 3. Keep `--last-failed`; it and file filters stay mutually exclusive as today.
-4. Align the verdict with the bar's exit-code rule, which today's classes do not meet: verdicts map to exits 0/1/3/4/130, only `ConfigRefused` produces exit 2, `TestStatus` has no `flaky` or timed-out status, and `REPLAY_STALE` folds as a failing automation failure. Make the highest code present win under the bar's ordering (130 > 4 > 3 > 2 > 1 > 0), give the refused class exit 2 with producers for `ONLY_IN_CI` and `COLLECTION_ERROR` (U14), `BODY_REFUSED` (U3) and `REPLAY_STALE` (reclassed from failing, U17), add the `flaky` and timed-out statuses, and count flaky tests — passed on retry — in the run summary. The CI defaults, trace pages and `report.json` stay, pinned by test.
+4. Decode the R30 run flags as run overrides: `--headed` (U12's engine option), `--action-timeout` (over the config's `actionTimeout`; a call's own `{ timeout }` still wins), `--max-duration` (a new `maxDuration` config key), and `--debug` for U19's step table and transcripts. `--agent` keeps its existing decode; its per-agent run semantics are U19's.
+5. `--max-duration` stops the run at the limit: the rest skip with cause `time-limit`, running tests end `interrupted`, and the run folds `RUN_TIMEOUT` at exit 1 — the statuses and exit classes are U3's.
+6. The CI defaults, trace pages and `report.json` stay, pinned by test.
 
 **Test scenarios:**
 - `tests/a.e2e.ts:12` runs the test that opens on line 12; a stale line fails `NO_TESTS` listing the registered lines.
@@ -981,8 +1011,10 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - `--grep 'checkout pays'` matches the describe and test titles joined by a space; `--grep-invert` drops them.
 - `--shard 2/3` selects one contiguous slice and keeps a serial group whole.
 - `effect-e2e list` prints the selection and `(skipped: <reason>)` and starts no browser.
-- A run whose only refusal is `ONLY_IN_CI`, a collection error, or a stale replay exits 2.
-- A test that passes on its retry is counted flaky in the summary and does not fail the run.
+- `--action-timeout 5000` fails a missing locator in 5 s; a call's own `{ timeout }` wins.
+- `--max-duration 1000` stops a long run: the rest skip with `time-limit`, the running test ends `interrupted`, and the run exits 1 with `RUN_TIMEOUT`.
+- `--headed` sets the engine's headed option on the run; the visible launch itself is proven off-host.
+- `--debug` sets the run option the step table and transcripts read.
 - With `CI` set the run uses one retry, one worker and a read-only cache.
 
 **Verification:** the CLI selection suite passes locally; `cli-run.integration.test.ts` runs off-host.
@@ -1001,7 +1033,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Files:**
 - `packages/effect-e2e/src/Config/config.schema.ts` (`AgentConfig`: `judge`, `judgmentTimeout`, `maxObservationBytes`, `executor`), `src/runner/wiring.ts`, `src/runner/options.ts`
-- `packages/effect-e2e/src/agent/act.ts`, `judgment.ts`, `tool-definition.ts`, `mod.ts`, `redaction.ts`, `src/agent/executor.ts` (new)
+- `packages/effect-e2e/src/agent/act.ts`, `judgment.ts`, `tool-definition.ts`, `mod.ts`, `redaction.ts`, `src/agent/executor.ts` (new), `src/verdict/step-record.schema.ts` (the fields the `debug` table reads)
 - `packages/effect-e2e/src/run/test-session.service.ts`
 - Test: `packages/effect-e2e/tests/agent-surface.integration.test.ts`, `packages/effect-e2e/tests/agent-executor.integration.test.ts`
 
@@ -1009,8 +1041,9 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 1. Select the agent per test: the `agent` option takes a name or a list run once per agent; `--agent a,b` runs unpinned tests for each and narrows a pinned list without replacing a pin; `agent.act(..., { agent })` overrides one call. A result records which agent ran it.
 2. Add `onBeforeAction` beside `onAction`, firing before each action including replayed ones, with `index` restarting at 1 per `act`.
 3. Add project `tools` to an agent entry as Effect-native definitions (schema, handler, `mutates`), run through the same budgets.
-4. Add the `StepExecutor` seam: `{ name, version, cache, runStep(ctx) }` with a context carrying the step, `observe`, checked and recorded `actions`, the target's supported verbs, a signal, `replayedPrefix`, budgets and the agent context. The redaction boundary is the runner's: every model call an executor makes is wrapped by `redactRequest(step.ledger.redact)` — the same boundary `act.ts`, `check-resolver.ts` and `extract.ts` use today — and the context's observations arrive already redacted; an executor that builds a provider request directly is refused, and the runner keeps deadlines and the verdict record (R23). Add a tool-loop executor factory and grammar tools for the built-in actions; the navigate tool accepts only http(s) URLs resolved against `app.baseUrl` and the upload tool takes the same project-root restriction as `setInputFiles`, both refusing with `POLICY_DENIED` — model-chosen URLs and paths are untrusted input, and direct author calls are not restricted.
-5. A judge model per agent; `system` or `tools` beside `executor` is refused.
+4. Add the `StepExecutor` seam: `{ name, version, cache, runStep(ctx) }` with a context carrying the step, `observe`, checked and recorded `actions`, the target's supported verbs, a signal, `replayedPrefix`, budgets and the agent context. The redaction boundary is the runner's, and it protects by not disclosing: the context carries no plaintext secret — observations arrive redacted, screenshots masked, secrets only as handles the runner fills — so an executor cannot send what it never receives; the built-in and package executors route their model calls through `redactRequest(step.ledger.redact)`, the same boundary `act.ts`, `check-resolver.ts` and `extract.ts` use today; a custom executor's own provider traffic is outside the runner's boundary and the README says so plainly; the runner keeps deadlines and the verdict record (R23). Add a tool-loop executor factory and grammar tools for the built-in actions; the fill and type grammar tools and the agent-param fill path enforce the credential-password sink rule (U7): a credential password into a non-password input is `POLICY_DENIED`. The navigate tool accepts only http(s) URLs resolved against `app.baseUrl` and the upload tool takes the same project-root restriction as `setInputFiles`, both refusing with `POLICY_DENIED` — model-chosen URLs and paths are untrusted input, and direct author calls are not restricted.
+5. Under the `debug` run option (decoded by U18), each agent step writes its transcript artifact and the run prints the per-step table — duration, model calls, cache share, and tokens and cost when the provider reports them — to stderr; step records carry the fields the table reads.
+6. A judge model per agent; `system` or `tools` beside `executor` is refused.
 
 **Test scenarios:**
 - A test with `agent: ['buyer', 'admin']` runs twice and the report names each agent.
@@ -1022,6 +1055,9 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - `system` beside `executor` fails config decode.
 - A registered secret on screen appears in no model request the stub gateway receives.
 - The grammar navigate tool refuses a non-http(s) URL with `POLICY_DENIED`; the upload tool refuses a path outside the project root with `POLICY_DENIED`.
+- An agent fill of a credential password into a plain textbox fails `POLICY_DENIED`.
+- The executor context exposes no registered secret value, and no request the stub gateway receives carries one.
+- With the `debug` option set, the run prints the per-step table and saves step transcripts as artifacts.
 
 **Verification:** the agent suites pass locally against the stub gateway; the agent journeys join the parity profile with the scripted stubs and run in the `test:engine` lane.
 
@@ -1072,7 +1108,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Approach:**
 1. Implement `claudeCode({ model })` and `codex()` over the `StepExecutor` seam as ACP clients using the fluent `client()` of `@agentclientprotocol/sdk`, not the deprecated `ClientSideConnection`.
-2. Expose the step's tools to the agent through an in-process MCP server for that step only; start the agent with no built-in tools, no user, project or local settings, no other MCP server, no saved session and no permission bypass (Codex read-only, no shell, web, apps or plugins). Prompt and observation content passes the runner's redaction boundary (R23) before it reaches the agent.
+2. Expose the step's tools to the agent through an in-process MCP server for that step only; start the agent with no built-in tools, no user, project or local settings, no other MCP server, no saved session and no permission bypass (Codex read-only, no shell, web, apps or plugins). The subprocess environment is allowlisted — `PATH`, `HOME`, and that agent's own auth variables; no `E2E_SECRET_*` or `E2E_USER_*` name — so an adapter version that grows a tool still starts without secret material. Prompt and observation content passes the runner's redaction boundary (R23) before it reaches the agent.
 3. Count each prompt turn as one model call against `maxModelCalls`, with tokens and cost when the agent reports them; `maxSteps` and the step timeout bound the turn.
 4. `@agentclientprotocol/claude-agent-acp` and `@agentclientprotocol/codex-acp` are optional peers. Put the dependency vetting for each third-party package in the PR body.
 
@@ -1082,6 +1118,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - Each prompt turn counts as one model call and the budget stops a step at `maxModelCalls`.
 - An agent that starts a subagent fails the step like a tool of its own.
 - A registered secret on screen appears in no prompt the fake ACP agent receives.
+- The fake ACP agent's environment holds no registered secret variable.
 - A step timeout cancels the turn.
 
 **Verification:** the package's gates pass with the fake agent; a run against Claude Code or Codex needs credentials, is not exercised here, and is reported as such.
@@ -1096,7 +1133,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Requirements:** R6, R11, R17, R20; KTD7.
 
-**Dependencies:** U11, U12.
+**Dependencies:** U10, U12.
 
 **Files:**
 - `packages/effect-e2e/src/runner/screenshot.ts` (new), `check-table.ts`, `test-api.ts`, `src/Config/config.schema.ts` (`Trace`, `video`), `src/run/capture-evidence.ts`, `src/run/trace.ts`
@@ -1105,7 +1142,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - Test: `packages/effect-e2e/tests/screenshot.integration.test.ts`, `packages/effect-e2e-conformance/src/engine-law.ts`
 
 **Approach:**
-1. `toHaveScreenshot` on `screen` and on a locator compares against `<test file>-snapshots/<name>-<target>-<os>.png` with `threshold`, `maxDiffPixels`, `maxDiffPixelRatio`, `mask`, `maskColor` and `timeout`; the first run writes the file and fails; `-u` writes missing and different files and passes; a CI run writes nothing and attaches a missing file under the test's results; a failure attaches `-expected`, `-actual` and `-diff`. `app.screenshot`, `toHaveScreenshot` captures, the model's screenshot and recorded video mask secure fields automatically — password inputs and inputs filled with a secret handle; a generic secret filled into a plain input is not masked, and the README carries the bar's use-test-credentials guidance (R20, R23).
+1. `toHaveScreenshot` on `screen` and on a locator compares against `<test file>-snapshots/<name>-<target>-<os>.png` with `threshold`, `maxDiffPixels`, `maxDiffPixelRatio`, `mask`, `maskColor` and `timeout`; the first run writes the file and fails; `-u` writes missing and different files and passes; a CI run writes nothing and attaches a missing file under the test's results; a failure attaches `-expected`, `-actual` and `-diff`. `app.screenshot`, `toHaveScreenshot` captures and the model's screenshot mask secure fields automatically — password inputs, including one filled with a secret handle; no other input is masked, whatever was filled into it (R20, R23). Recorded video is not masked — Playwright video has no pixel mask — and the README carries the bar's guidance to keep secrets off screen while recording.
 2. Refuse a threshold or a diff ratio that cannot fail and a mask that covers the whole screen, with the rewrite named (R6).
 3. `app.startRecording({ name })` and `stopRecording()` return the videos recorded in the span and fail while the test's `video` records.
 4. The `video` option and `--video` take `'off'`, `'on'`, `'retain-on-failure'`, `'on-first-retry'` and `'on-all-retries'`, and `Trace` gains the retry modes; the innermost layer wins.
@@ -1119,8 +1156,8 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - `maxDiffPixelRatio: 1` is refused with its rewrite.
 - A test with `video: 'on'` that calls `startRecording` fails; with `video: 'off'` it returns one video.
 - `retain-on-failure` keeps the video of a failing attempt only.
-- A password field is masked in `toHaveScreenshot`, `app.screenshot` and the recorded video.
-- A secret filled into a plain input is not masked; the README documents the bar's guidance.
+- A password field is masked in `toHaveScreenshot` and `app.screenshot` captures.
+- A generic secret filled into a plain input is not masked, and neither is a recorded video; the README documents both the masking rule and the keep-secrets-off-screen guidance.
 
 **Verification:** the pure comparison and option tests pass locally; the browser behaviour passes off-host.
 
@@ -1138,7 +1175,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Approach:**
 1. Write the coverage table with one row per behaviour the three bar files teach: the bar's wording, the public API, the proving parity test and the differential journey when one exists. Independent review judges its completeness; no check reads the bar to gate it.
-2. Confirm every behaviour the table lists has a test that runs through the public API in the conformance suite — including the R22 screenshot and video rows, the R25 agent and executor rows over the scripted stubs, and the R26 strict-cache rows — and that the suite runs at the local profile and in the `test:engine` lane.
+2. Confirm every behaviour the table lists has a test that runs through the public API in the conformance suite — including the R20 screenshot and video rows, the R25 agent and executor rows over the scripted stubs, and the R26 strict-cache rows — and that the suite runs at the local profile and in the `test:engine` lane.
 3. Remove any scaffold, dead branch or abandoned attempt left by earlier PRs; confirm no old-API symbol, template or README snippet remains.
 4. Coordinate with the compound `e2e-testing` pack (systemfsoftware PR #919) so its examples compile against the released API.
 
@@ -1176,8 +1213,8 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 
 **Per unit**
 - U1: the consumer fixture mints a check from a built tarball; the fork's own suites pass unchanged.
-- U2: `pnpm check:local` is green with no source change.
-- U3 and U4: the slop fixture project fails `tsc` for every compile-time row of the decision matrix, and the old API is gone.
+- U2: `pnpm check:local` is green with manifest-only changes.
+- U3 and U4: the slop fixture project fails `tsc` for every compile-time row of the decision matrix, the old API is gone, and the run's exit codes and flaky count match the bar's rule.
 - U5: a divergent journey fails the run naming the journey and the field.
 - U6 through U8: the fake and the web engine pass the same laws.
 - U9 through U11: every matcher in the bar's locator and value tables has a passing scenario and the weak-check rows are pinned.
@@ -1185,7 +1222,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 - U14: the serial scenario and every option-refusal scenario pass.
 - U15, U16: teardown runs after failure; the session restores cookies, local storage and IndexedDB.
 - U17: strict mode fails a stale recording and writes nothing.
-- U18: each selection form in R30 has a passing scenario, and the run's exit codes and flaky count match the bar's rule.
+- U18: each selection form and each R30 run flag has a passing scenario.
 - U19 through U21: each executor passes a hermetic scenario, and the live-provider gap is named in the PR.
 - U22: the first run writes the snapshot and fails, and `-u` passes.
 - U23: the coverage table lists every taught behaviour with its evidence.
@@ -1195,16 +1232,18 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 | Risk | Effect | Mitigation |
 |---|---|---|
 | The kernel refactor regresses the fork's `it` lanes | Every fork consumer breaks | The fork's refusal suites are the guard (U1); keep the default tables and reset predicate identical |
+| The branded-handle typing (KTD3) rests on the first review round's probe, not a fresh one | A yield-union collapse would surface late, in P2 | U1's typed suites and the consumer fixture prove the yield union before P2 starts; the fork's `test-types` pin it |
+| Agent-bearing differential journeys compare scripted model stubs | R31's evidence on agent behaviour is weak | U5 names the agent-bearing journeys; the same stubs drive the parity rows; the live-provider gap stays named in each PR |
 | The fork's refusal-table types are keyed on module-level constants (per the shipped 3.0.0 declarations), so the consumer-table refactor may outgrow one PR | F1 widens; P2's start slips | U1 sizes the refactor against fork head first and splits F1 into the export and a typed-tables PR if needed; P2 starts only after the typed-tables PR merges |
 | The core pin bump brings other core changes | P1 fails or P2 stalls | Stop condition; take only the commit that carries the release |
 | The fork release needs operator approval | F1 and everything after it wait | Open F1 first; name the gate in the report |
 | `tsc` 7 and tstyche's TypeScript 6 infer the gate differently | A refusal holds in one and not the other | U4 tests both: tstyche (TS 6) and a spawned `tsc` (the repo's TS 7) |
 | Playwright cannot do a browser behaviour as the bar describes | A unit stalls | Stop condition; report the exact Playwright limit as an owner question |
-| `e2e` and effect-e2e run different Chromium revisions | The differential compares unlike pages | U5 checks `playwright-core` 1.64.1 resolves beside `playwright`; pin if not |
+| `e2e` and effect-e2e resolve different `playwright-core` revisions | The differential compares unlike pages; journeys fail to launch | U5 pins the catalog `playwright` to exactly 1.64.1 in P3 so both runners share one revision; `@e2e-dev/web`'s pin is never overridden |
 | The decision-model specification and the Agent Client Protocol SDK change upstream | U20 or U21 drifts | Exact version pins; the fluent `client()` API, not the deprecated classes |
 | New third-party dependencies fail vetting | A package cannot ship | The PR body shows the vetting; a failed vetting is reported, not waived |
 | A PR's affected lane runs only changed tests, so unchanged browser surfaces are proven on `main` after merge | A browser regression lands before the full engine suites run | Changed engine tests run on the PR through the affected lane; the fake engine laws and pure tests run locally; the off-host command is named on every PR |
-| Seventeen PRs queue slowly | The cutover lingers | The dependency graph lets P3, P4, P8, P10 and P12 proceed in parallel after P2 |
+| Eighteen PRs queue slowly | The cutover lingers | The dependency graph lets P3, P4, P8 and P10 proceed in parallel after P2 |
 
 ### Documentation / Operational Notes
 
@@ -1215,7 +1254,7 @@ Dependent PRs open against `main` after their dependency merges. Where a stack a
 ### Sources / Research
 
 - The bar: the `e2e` 0.23.0 package's `skills/e2e/SKILL.md` and `references/writing-tests.md`, `agent.md`, `running.md`, and its shipped `docs/executors.mdx`, `docs/decision-models.mdx`, `docs/subscriptions.mdx` and `docs/telemetry.mdx`.
-- The fork: `packages/runner/vitest/src/mod.ts`, `internal/checks.ts`, `internal/driver.ts`, `internal/refusals.ts`, `internal/guard.ts` and `internal/runner.ts` in systemfsoftware.
+- The fork: `packages/runner/vitest/src/mod.ts`, `internal/checks.ts`, `internal/driver.ts`, `internal/refusals.ts`, `internal/guard.ts` and `internal/runner.ts` in systemfsoftware. The v3.0.0→v4.0.1 change record for that package (`git diff @systemfsoftware/vitest@v3.0.0 @systemfsoftware/vitest@v4.0.1 -- packages/runner/vitest`) is nine files with no public-surface change — U2's release-line finding.
 - Current authoring surface: `packages/effect-e2e/src/runner/test-api.ts`, `fixtures.ts`, `screen-expectation.ts`, `vitest-runner.ts`.
 - Engine: `packages/effect-e2e/src/engine/action.schema.ts`, `engine.schema.ts`, `engine.service.ts`, `locator.schema.ts`, `capability.schema.ts`; `packages/effect-e2e-web/src/`.
 - Cache and steps: `packages/effect-e2e/src/cache/settle-recordings.workflow.ts`, `classify-replay.workflow.ts`, `verdict/step-record.schema.ts`, `run/test-session.service.ts`.
