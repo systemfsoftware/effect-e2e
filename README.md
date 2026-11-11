@@ -96,6 +96,21 @@ pnpm exec effect-e2e run --dir my-suite
 
 The [`@systemfsoftware/effect-e2e` README](packages/effect-e2e/README.md) describes the config API and the `ai-trace.json` file that records model calls for a failed try.
 
+## Compound packs
+
+This repository publishes the [`e2e-testing`](compound-packs/e2e-testing/) Compound Engineering pack: where an end-to-end test lives, what it drives, and how it is written. Consumers declare it in `.compound-engineering/config.yaml` by git source, `ref` and `path: compound-packs`, pinned by tag:
+
+```yaml
+packs:
+  - source: https://github.com/systemfsoftware/effect-e2e
+    ref: compound-packs-v0.1.0
+    path: compound-packs
+```
+
+`path: compound-packs` is what keeps the pack id `e2e-testing`: the pack is the child directory of that name, not the repository root. Pack-content changes retag `compound-packs-v<semver>`; pin the tag you want to reproduce.
+
+The pack's rules cite the `testing` pack, published from `https://github.com/systemfsoftware/systemfsoftware` with its `compound-packs-v<semver>` tag and `path: compound-packs`. Citations resolve only for consumers that declare that source too, so a consumer wanting both corpora declares both sources.
+
 ## Contributing
 
 Development setup, the gate and the conventions are in [CONTRIBUTING.md](CONTRIBUTING.md).
