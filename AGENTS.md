@@ -35,6 +35,7 @@ pnpm install
 - CI (`.github/workflows/ci.yml`) calls core's reusable checks at a pinned core commit. A pull request (and a
   merge-queue draft) runs the static lane and the affected tests (`.github/ci/pr-tests.mjs`: `turbo --affected`,
   `vitest --changed`) and no packed test job; main runs every package's whole suite at the per-change profile and the browser engine suites (`test:engine`). `nix.yml` builds the flake outputs on main only.
+- nix.systemfsoftware.com is the package registry for `@systemfsoftware` packages: `nix-cache-push.yml` pushes `workspace-tarballs` and every member of `workspace-tarballs.members` (built from `github:<owner>/<repo>/<sha>`) to it from main, and nothing goes to npm.
 - Never start a local mutation run; mutation runs in CI only.
 - Version bumps: every change to a publishable package's packed output advances its version at least a patch.
 
