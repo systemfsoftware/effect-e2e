@@ -4,7 +4,7 @@ The command line for [`@systemfsoftware/effect-e2e`](../effect-e2e).
 
 ## Install
 
-Add it as a devDependency. It is distributed as a workspace tarball of the [systemfsoftware flake](https://github.com/systemfsoftware/systemfsoftware) (`packages.<system>.effect-e2e-cli`), which `lib.mkConsumerStore` serves to an offline pnpm install. It ships the `effect-e2e` bin and has no module entry, so nothing imports it. It requires Node `>=24` (its `engines` field).
+Add it as a devDependency. It is a workspace tarball of the [effect-e2e flake](https://github.com/systemfsoftware/effect-e2e) (`packages.<system>.effect-e2e-cli`), taken from nix.systemfsoftware.com through a flake input. It ships the `effect-e2e` bin and has no module entry, so nothing imports it. It requires Node `>=24` (its `engines` field).
 
 ## Usage
 

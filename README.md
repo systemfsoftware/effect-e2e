@@ -11,19 +11,7 @@ Effect-native end-to-end testing: the effect-e2e core, its web engine, its CLI a
 
 ## Install
 
-The following installs locally built tarballs into a new consumer directory. Run it from a checkout of this repository with Nix, Node.js 24 or newer, npm, and registry access for the other dependencies.
-
-The npm registry returned 404 for the three effect-e2e packages when checked; this example does not install them from npm. The core dependency tarball version comes from the checkout's [workspace overrides](pnpm-workspace.yaml).
-
-```bash
-consumer="$(mktemp -d)"
-core="$(nix build --no-link --print-out-paths .#sfs-deps)"
-runtime="$(nix build --no-link --print-out-paths .#effect-e2e)"
-cli="$(nix build --no-link --print-out-paths .#effect-e2e-cli)"
-npm install --prefix "$consumer" --no-audit --no-fund "$core/effect-cell-types-12.0.2.tgz" effect@4.1.2
-npm install --prefix "$consumer" --no-audit --no-fund "$runtime"
-npm install --prefix "$consumer" --no-audit --no-fund "$cli"
-```
+nix.systemfsoftware.com is the package registry for `@systemfsoftware` packages: producers push package tarballs there from `main`, consumers substitute them through flake inputs, and nothing goes to npm. Take `effect-e2e`, `effect-e2e-cli` and `effect-e2e-web` from this repository's flake (`packages.<system>.<name>`) through a flake input, and install `effect@4.1.2` beside them. None of them is on npm.
 
 ## Usage
 

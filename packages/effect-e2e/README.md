@@ -17,7 +17,7 @@ Calls made to classify a failure are recorded under the step that failed. A scre
 
 ## Install
 
-Add it as a devDependency. It is distributed as a workspace tarball of the [systemfsoftware flake](https://github.com/systemfsoftware/systemfsoftware) (`packages.<system>.effect-e2e`), which `lib.mkConsumerStore` serves to an offline pnpm install. Its dependencies come along with the tarball, and a consumer's `package.json` depends on it as `file:.sfs-deps/<name>-<version>.tgz`.
+Add it as a devDependency. It is a workspace tarball of the [effect-e2e flake](https://github.com/systemfsoftware/effect-e2e) (`packages.<system>.effect-e2e`), taken from nix.systemfsoftware.com through a flake input. Its dependencies come along with the tarball.
 
 Its peers are `effect` (`^4`) and `vitest` (`^5.0.5`); the suite must provide both.
 
