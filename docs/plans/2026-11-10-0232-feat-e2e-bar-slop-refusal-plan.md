@@ -16,9 +16,9 @@ execution: code
 - **Means:** One refusal kernel, owned by `@systemfsoftware/vitest` and consumed here, drives generator test bodies whose checks reach the body only through the test's own callback (KTD1, KTD3).
 - **Product authority:** Linear SYS-1259 (its "Done when" and "Owner-approved exceptions") and the owner rulings recorded there. The bar is the skill that `e2e` 0.23.0 ships: `skills/e2e/SKILL.md` and `references/{writing-tests,agent}.md`.
 - **Active scope:** the web engine only. Mobile engines, explore and the MCP server are not active scope; SYS-1259 records them as later, separate work.
-- **Execution profile:** eighteen PRs, one in `systemfsoftware/systemfsoftware` and seventeen here. Each ends in a green `pnpm check:local`, is reviewed by fresh reviewers, and merges through the merge queue. The maker opens each PR and ce-work builds them in the order under Sequencing.
-- **Stop conditions:** stop and report when the fork's release needs operator approval, when the core pin bump brings a core change that breaks this repo, when an owner answer changes a requirement the next unit builds on, or when a unit's browser behaviour cannot be reached through Playwright or a taught run rule cannot be reached through the Vitest runner (as with a fresh module realm per retry).
-- **Open blockers:** none. Four owner questions are named switches under Owner-answer switches and do not hold planning. Two steps are gated: the fork's release (an external release) and the dependency vetting for each new third-party package.
+- **Execution profile:** seventeen PRs, one in `systemfsoftware/systemfsoftware` and sixteen here. Each ends in a green `pnpm check:local`, is reviewed by fresh reviewers, and merges through the merge queue. The maker opens each PR and ce-work builds them in the order under Sequencing.
+- **Stop conditions:** stop and report when the fork's release needs operator approval, when the core pin bump brings a core change that breaks this repo, when a new owner ruling changes a requirement the next unit builds on, or when a unit's browser behaviour cannot be reached through Playwright or a taught run rule cannot be reached through the Vitest runner (as with a fresh module realm per retry).
+- **Open blockers:** none. The four owner rulings of 2026-11-10 are settled text under Owner rulings, and no switch, flag or option stands for any of them. Two steps are gated: the fork's release (an external release) and the dependency vetting for each new third-party package.
 
 ---
 
@@ -54,12 +54,12 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 - R2. A synchronous body, an `async` body, and a body that returns an Effect each fail to compile at the body, and the message names the generator rewrite.
 - R3. A test whose body yields no exact check fails to compile at the test name, and the message names the rewrite. Only exact screen, browser and value checks count; `agent.assert`, `agent.waitFor` and `agent.extract` never do.
 - R4. A body can yield only e2e steps and checks. A sleep, a fixed delay or a polling loop has no yieldable form, and the refusal names `waitFor` or a matcher `timeout` as the rewrite.
-- R5. Two checks on one observed state are refused, and the message names the single-check rewrite; when a wait-class step separates the checks across a real async transition (KTD4), the message names the transition rewrite instead — split the test at the transition, or wait with a matcher and assert once. An observed state ends at any step that can change the screen or the page.
-- R6. A weak check is refused with its rewrite: at least the fork's boolean-actual, vacuous-match and missing-argument cases, plus the e2e-specific weak checks that planning enumerates against the bar's matcher list.
-- R7. A check that is written and never yielded is refused, and the existing detection of unawaited steps stays: a written-never-yielded step and an un-awaited poll fail `STEP_NOT_AWAITED` at the line of the call, never `BODY_REFUSED`.
+- R5. Two checks on one observed state are refused, and the message names the single-read rewrite: read the several facts, then check them in one check (`expect({ total, status }).toEqual({ ... })`). A wait-class step does not end the state (KTD4), so check, wait, check is refused too, and its message names the transition rewrite: split the test at the transition. An observed state ends at any step that can change the screen or the page.
+- R6. A weak check is refused with its rewrite: the fork's boolean-actual, vacuous-match and missing-argument cases; the five bar-listed weak value matchers `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty` (an approved exception to the bar's matcher table); `expect.soft` and `expect.poll` (an approved exception); and the e2e-specific vacuous shapes that planning enumerates against the bar's matcher list.
+- R7. A check that is written and never yielded is refused, and the existing detection of unawaited steps stays: a written-never-yielded step fails `STEP_NOT_AWAITED` at the line of the call, never `BODY_REFUSED`.
 - R8. A test registered through raw Vitest `test` or `it`, or a check from raw Vitest `expect`, is refused with the rewrite named.
 - R9. Every refusal message names its rewrite. A shape is refused at compile time wherever types can see it; every other shape is refused at run time with the same text. A run-time refusal ends the try with `BODY_REFUSED` in the refused class: exit 2, never retried, and never absorbed by `test.fail` or a `skip`.
-- R10. For each slop shape the Goal names (many checks, no check, a model judgment as the only check), a type-level test shows a failing `tsc` run at the slop code. If planning shows `tsc` cannot reach the several-checks shape, that is recorded as a proposed exception for owner approval in SYS-1259, never left as review or documentation.
+- R10. For each slop shape the Goal names (many checks, no check, a model judgment as the only check), a type-level test shows a failing `tsc` run at the slop code. A shape `tsc` cannot reach is refused at run time with the same text and is listed under the approved exceptions (owner ruling 3), never left as review or documentation.
 
 **Registration and run rules**
 
@@ -75,7 +75,7 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 - R17. `app` provides `baseUrl`, `open`, `back`, `restart`, `clearState`, `screenshot`, `startRecording` and `stopRecording`, with the bar's failure behaviour; `clearState` refuses with `UNSUPPORTED_CAPABILITY` on a browser attached through `connect.reconnectEndpoint` (owner-ruled in scope).
 - R18. `screen` provides the bar's locator queries and options, strictness with `LOCATOR_AMBIGUOUS`, `filter`, `first`, `last`, `nth`, `or`, scoping, `visible`, scrolling to a locator, `tree` and `debug`, with `getByTestId` reading the configurable test-id attribute (`web({ testIdAttribute })`, default `data-testid`).
 - R19. A test can act exactly: `tap` (alias `click`), `doubleTap` (alias `dblclick`), `secondaryTap`, `longPress`, `fill` (text or secret), `pressSequentially`, `clear`, `press`, `check`, `uncheck`, `selectOption`, `focus`, `hover`, `setInputFiles`, `dragTo`, `scrollIntoView`, `scrollUntilVisible`, `swipe`, and the coordinate forms. A test can read as the bar's reads do, including `count` and `waitFor({ state })`.
-- R20. Checks cover the bar's locator, browser and value matcher tables, including `toHaveCount` and `toHaveURL`, list forms, `.not` with its hold rule, `soft`, `poll`, `toMatchSchema`, the asymmetric matchers, and the option flips. Screenshot comparison covers snapshot files, update mode, masking, automatic secure-field masking and per-target files; a secure field is a password input, including one filled with a secret handle, and no other input is masked, whatever was filled into it.
+- R20. Checks cover the bar's locator, browser and value matcher tables, including `toHaveCount` and `toHaveURL`, list forms, `.not` with its hold rule, `toMatchSchema`, the asymmetric matchers, and the option flips; `expect.soft`, `expect.poll` and the five weak value matchers of R6 are not carried, and each is refused (approved exceptions, owner rulings 2 and 4). Screenshot comparison covers snapshot files, update mode, masking, automatic secure-field masking and per-target files; a secure field is a password input, including one filled with a secret handle, and no other input is masked, whatever was filled into it.
 - R21. The browser fixture provides navigation, page reads, raw locators, frame locators, `evaluate`, init scripts, routes with `fulfill`, `continue`, `fallback` and `abort`, `waitForResponse`, cookies, viewport, media emulation, dialogs, downloads, and raw keyboard and mouse.
 - R22. `test.extend` adds fixtures whose code after `use()` runs after a failing test too; a fixture applies only to tests registered through its own `test`. Fixture bodies yield the same steps and checks as a test body, including a `request` step bound to `app.baseUrl` for API seeding and cleanup; hook bodies yield the same steps and receive fixtures but no `expect`.
 - R23. Sign-in sessions work: a setup test saves a named session once, dependent tests declare it, setup runs when only a dependent test is selected, and the setup restrictions hold. Credentials and secrets are configured as the bar teaches, owner-ruled with no exception (the `{ env }` reference form is removed; zero consumers): a static value — a static password or secret needs 6 or more code points, else `INVALID_CONFIG` at config load — or a function read at fill time and redacted from that fill on, with `E2E_USER_<NAME>_USERNAME`/`E2E_USER_<NAME>_PASSWORD` and `E2E_SECRET_<NAME>` run overrides, `<NAME>` uppercased with every character outside `[A-Z0-9]` as `_` and two entries of one namespace mapping to one variable an `INVALID_CONFIG`. A credential or secret resolves to an opaque handle, redacted from reports, step labels, model input, the step transcripts the `debug` option writes, and the `<output>/ai-trace.json` file the `--ai-trace` flag writes (U19), and accepted only by `fill` and agent params; a credential password fills only password inputs (`POLICY_DENIED` anywhere else), a `secrets.get` handle fills any editable input, and `credentials.user()` outside a run refuses with `AUTH_CREDENTIAL_UNAVAILABLE`.
@@ -98,8 +98,8 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 
 - AE1. **Covers R3.** Given a test that opens a page and runs `agent.act` with no exact check after it, `tsc` reports an error at the test name, and the message names yielding a check from the callback.
 - AE2. **Covers R3, R25.** Given a test whose only check is `agent.assert('the dashboard loads')`, `tsc` reports the same no-check error, and the message says a model judgment does not count.
-- AE3. **Covers R4.** Given a body that sleeps with `yield` of a bare Promise between steps, the test is refused at its name and the message names `waitFor`; a `yield*` of a bare Promise or a yielded `Effect.sleep` fails `tsc` with the compiler's own message, recorded in the proposed exception request.
-- AE4. **Covers R5.** Given a test that checks a list's count, then its heading, then its status text on the same screen with no step between, the second check is refused and the message names the single-check rewrite.
+- AE3. **Covers R4.** Given a body that sleeps with `yield` of a bare Promise between steps, the test is refused at its name and the message names `waitFor`; a `yield*` of a bare Promise or a yielded `Effect.sleep` fails `tsc` with the compiler's own message, recorded in the approved exceptions.
+- AE4. **Covers R5.** Given a test that checks a list's count, then its heading, then its status text on the same screen with no step between, the second check is refused and the message names the single-read rewrite.
 - AE5. **Covers R1, R8.** Given a test that imports `expect` from `vitest` or registers with `it`, the run refuses the test and names the callback-parameter rewrite.
 - AE6. **Covers R13.** Given `test.only` in a run with `CI` set, the run fails with `ONLY_IN_CI`; locally it runs the one test.
 - AE7. **Covers R12.** Given a `test.fail` test whose body passes, the test fails with `UNEXPECTED_PASS`.
@@ -111,7 +111,7 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 ### Success Criteria
 
 - Each behaviour the three bar files teach has a row in the R27 table that names the public API and the test that proves it.
-- Each Goal slop shape fails `tsc` at the slop code with a message that names its rewrite, and a type-level test pins that — except a shape in the proposed exception request, which is refused at run time until the owner decides in SYS-1259.
+- Each Goal slop shape fails `tsc` at the slop code with a message that names its rewrite, and a type-level test pins that — except a shape among the approved run-time refusals, which fails the test at run time with the same text.
 - Each taught behaviour that a journey can exercise has a journey in the differential suite, and every journey's verdict matches `e2e`.
 - `pnpm check:local` passes on each PR's head, and each PR merges through the merge queue.
 - A reader of the compound `e2e-testing` pack can write its examples against this API without leaving the bar's taught behaviours.
@@ -155,12 +155,12 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 - Which differential journeys involve agent steps, and how each runner's scripted model stub answers them (U5, U19).
 - The Playwright route each browser behaviour in R21 takes where Playwright offers more than one (U12, U13).
 
-**Owner questions (raised in the report; none holds planning; each is a named switch under Owner-answer switches)**
+**Owner rulings (2026-11-10; recorded at the end of SYS-1259's description). The rule behind all four: as strict as the vitest fork, no middle ground, because a middle ground is an escape hatch.**
 
-- The bar's own example file checks a list count, a status text, and the URL after one goal. R5 refuses that shape as written. The plan assumes the taught behaviour is the matchers and that a single check can carry several facts about one state; confirm that this reading holds. A second question rides the same switch: check, `agent.waitFor`, check across a real async transition is refused as one observed state today (KTD4) — confirm whether that case is one state or two.
-- Confirm that a run-time refusal is acceptable for any slop shape `tsc` provably cannot reach, now that the plan names each such shape and why, or whether each needs its own recorded exception.
-- The bar teaches `expect.soft` (a failure is kept and the body runs on) and `expect.poll`. The fork refuses both as slop shapes, so under the fork's binding neither is reachable as taught. R20 keeps both; confirm whether they are carried in their taught form, as a check kind the ledger counts once, or whether each needs a recorded exception.
-- The bar's value-matcher table lists `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty`, and the fork refuses all five as weak. R6 refuses weak checks and R20 covers the bar's table; confirm whether the five stay available or are refused.
+- One check per observed state, as R5 says. The rewrite is one read of several facts in one check. Check, wait, check is one state and is refused; the rewrite is to split the test at the transition. The bar's multi-check example is therefore one read and one check.
+- Run-time refusal is approved for every shape `tsc` cannot reach (the table under Approved exceptions). Each fails the test; none warns and none has an opt-out.
+- `expect.soft` and `expect.poll` are refused, as the fork refuses them. They are not a check kind and not an option. This is an approved exception to the bar. The rewrite for a poll is a locator check with a timeout.
+- The five bar-listed weak value matchers are refused. This is an approved exception to the bar's matcher table.
 
 ---
 
@@ -170,13 +170,15 @@ Nothing stops a slop test: ten checks on one screen, no check at all, or only a 
 
 **Fifth doc-review revision:** R5 (the transition rewrite), R7 (un-awaited steps and polls are `STEP_NOT_AWAITED`, never `BODY_REFUSED`), R23 (`<output>/ai-trace.json` joins the redaction sinks) and R25 (the bar's act-loop tool list; a missing model is one run-level `MODEL_UNAVAILABLE` at exit 2) were extended in place, and owner question 1 gained its check-wait-check sub-question; no other R or AE changed and no owner question is settled. The unit-by-unit check against the three bar files (the bar behaviour and its teaching section, the mechanism, the error code and exit class, the earlier unit) found, beyond the receipt, the act-loop tool vocabulary (U19 step 7), the run-level `MODEL_UNAVAILABLE` shape and `CONFIG_LOAD_FAILED` (U19 step 8), the `RUN_TIMEOUT` exit-1 class against 130 and the stopped-run no-save rule (U18 step 4), the sessions differential journey (U16 step 6) and the journey-appending dependency edges; each is fixed in the unit that owns it. All 17 findings are resolved; none is declined.
 
+**Owner-ruling revision:** the four owner switches are settled by the rulings recorded at the end of SYS-1259's description, and the plan carries each as settled text. R5 (single-read rewrite; check, wait, check refused with the split-at-the-transition rewrite), R6, R7 (no poll), R10, R20, AE3, AE4, KTD2 through KTD5, U1 (the per-check-kind window limit map and `unbounded` are removed, and no consumer table, option or static makes `soft` or `poll` available), U3, U4, U5, U10 (the five weak matchers join the refusal table, and `expect.soft` and `expect.poll` are refused) and the Verification Contract changed accordingly. U11 and P17 are deleted, and unit IDs are not renumbered. Owner-answer switches became Owner rulings, and the Proposed exception became Approved exceptions. Nothing is left as a switch, flag or option.
+
 ### Key Technical Decisions
 
 - KTD1. **The fork owns one refusal kernel and effect-e2e consumes it.** The fork exports the kernel (ledger, check brand, generator driver, refusal vocabulary, guard) on a new `kernel` subpath; effect-e2e adds `@systemfsoftware/vitest` as a runtime dependency and ships no second copy. A fork release and a core pin bump precede the first effect-e2e PR. Governs R1, R5, R6, R7, R8, R9. (session-settled: user-directed — chosen over a ported copy of the kernel in this repo: a second copy of the mechanism that refuses slop drifts from the original.)
-- KTD2. **The kernel takes its vocabulary as data.** Refusal tables, the observed-state reset predicate and custom `expect` subjects are parameters of the kernel, and the fork's own `it` lanes pass the fork's defaults. effect-e2e states its own weak-check table and its own locator subject, so an owner answer to a matcher question is a table row, not a fork change. Governs R5, R6, R20.
-- KTD3. **Steps are branded handles that launch when yielded, and fixtures expose no Promise.** A body's `yield*` operand is a branded step or check handle, never a bare Effect, so the generator's yield union cannot collapse to the widest `Effect` and a yielded `Effect.sleep` is a type error at the yield. The session's `launch`-and-`join` stays underneath: a body cannot fork a step (an `Effect.fork` result is not a yieldable handle), so `STEP_NOT_AWAITED` guards internal launches, and the ledger detects a handle that is written and never yielded: a check is refused `BODY_REFUSED` (R9), a step or an un-awaited poll fails `STEP_NOT_AWAITED` at the line of the call (R7). A handle launched inside another step's callback — a `waitForDownload` trigger, an `expect.poll` read — is run by the enclosing step, counts as yielded through it, and its own class decides the window: an action trigger resets it, a read keeps it. Wait-class steps (`locator.waitFor`, `browser.waitForURL`, `waitForResponse`, `onDialog`, `waitForDownload`) arm before their trigger and join later, and an armed wait never joined is refused when the try ends. Hook bodies are generators too and receive fixtures without `expect`. Governs R1, R4, R7, R15.
-- KTD4. **A step declares whether it changes the observed state.** Opening a page, every exact action, navigation and agent `act` reset the window; reads, the `request` step, `agent.assert`, `agent.extract` and the wait-class steps (`agent.waitFor`, `locator.waitFor`, `browser.waitForURL`) do not — a wait observes the page and cannot change it, so check, wait, check is still one observed state (R5), even when the wait crosses a real async transition (the taught `agent.waitFor('the import finished')` pattern): the second check across two distinct states is refused with `BODY_REFUSED` and a message naming the transition rewrite — split the test at the transition, or wait with a matcher and assert once — the accepted price of the no-reset rule, carried in owner switch 1's second question. The waits are steps, not checks: they never satisfy the R3 no-check gate, so a body of `agent.act` followed only by `browser.waitForURL` fails that gate. The kernel's reset predicate reads that declaration. Governs R3, R5.
-- KTD5. **Each slop shape is refused where the compiler can see it, with the compiler's reach recorded per shape.** The decision matrix under High-Level Technical Design is the record; shapes `tsc` cannot reach are the proposed exception request under its own heading. Governs R2, R3, R4, R5, R7, R8, R9, R10, R15.
+- KTD2. **The kernel takes its vocabulary as data.** Refusal tables, the observed-state reset predicate and custom `expect` subjects are parameters of the kernel, and the fork's own `it` lanes pass the fork's defaults. effect-e2e states its own weak-check table and its own locator subject, so each refusal is a table row, not a fork change. The one-check window is not a parameter: every consumer gets one check per observed state, and `soft` and `poll` stay refused whatever a table says. Governs R5, R6, R20.
+- KTD3. **Steps are branded handles that launch when yielded, and fixtures expose no Promise.** A body's `yield*` operand is a branded step or check handle, never a bare Effect, so the generator's yield union cannot collapse to the widest `Effect` and a yielded `Effect.sleep` is a type error at the yield. The session's `launch`-and-`join` stays underneath: a body cannot fork a step (an `Effect.fork` result is not a yieldable handle), so `STEP_NOT_AWAITED` guards internal launches, and the ledger detects a handle that is written and never yielded: a check is refused `BODY_REFUSED` (R9), a step fails `STEP_NOT_AWAITED` at the line of the call (R7). A handle launched inside another step's callback — a `waitForDownload` trigger — is run by the enclosing step, counts as yielded through it, and its own class decides the window: an action trigger resets it, a read keeps it. Wait-class steps (`locator.waitFor`, `browser.waitForURL`, `waitForResponse`, `onDialog`, `waitForDownload`) arm before their trigger and join later, and an armed wait never joined is refused when the try ends. Hook bodies are generators too and receive fixtures without `expect`. Governs R1, R4, R7, R15.
+- KTD4. **A step declares whether it changes the observed state.** Opening a page, every exact action, navigation and agent `act` reset the window; reads, the `request` step, `agent.assert`, `agent.extract` and the wait-class steps (`agent.waitFor`, `locator.waitFor`, `browser.waitForURL`) do not — a wait observes the page and cannot change it, so check, wait, check is one observed state (R5), even when the wait crosses a real async transition (the taught `agent.waitFor('the import finished')` pattern): the second check is refused with `BODY_REFUSED` and a message naming the transition rewrite — split the test at the transition. This is owner ruling 1; there is no wait-and-assert-once alternative and no reset-on-wait option. The waits are steps, not checks: they never satisfy the R3 no-check gate, so a body of `agent.act` followed only by `browser.waitForURL` fails that gate. The kernel's reset predicate reads that declaration. Governs R3, R5.
+- KTD5. **Each slop shape is refused where the compiler can see it, with the compiler's reach recorded per shape.** The decision matrix under High-Level Technical Design is the record; shapes `tsc` cannot reach are the approved run-time refusals under Approved exceptions. Governs R2, R3, R4, R5, R7, R8, R9, R10, R15.
 - KTD6. **Exact checks record a step, and only locator checks confirm the cache.** Locator checks record `LocatorStep`, value checks record `ValueStep`, and `locator.waitFor` and `browser.waitForURL` record `LocatorStep`. `VERIFICATION_TAGS` in `src/cache/settle-recordings.workflow.ts` is unchanged, so a value check never confirms a recording, as the bar says. Today nothing in `src/runner` produces either record, so an `act` followed by a locator check cannot confirm a recording. Governs R3, R20, R26.
 - KTD7. **The engine SPI grows by extending its tagged unions and capability literals, and no engine operation ships without a law.** `Action`, `ReadRequest`, `LocatorExpression` and `EngineCapability` gain members; the web engine delegates to Playwright; `memoryEngine` and `engine-law.ts` grow in the same PR. Governs R17, R18, R19, R21, R23.
 - KTD8. **Exact actions record an `ActionStep`.** A new `StepRecord` tag lets the trace page and `report.json` show what a test did exactly. Exact actions are not cached. Governs R19.
@@ -215,19 +217,19 @@ sequenceDiagram
 
 Decision matrix: where each slop shape is refused. "Compiler's own" means `tsc` refuses the code with TypeScript's message, which cannot name the rewrite.
 
-| Shape                                                                              | Requirement | `tsc`, our message    | `tsc`, compiler's own | Run time only      | Mechanism                                                                                                           |
-| ---------------------------------------------------------------------------------- | ----------- | --------------------- | --------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| Sync, `async` or Effect-returning body                                             | R2          | yes                   |                       | backstop           | `BodyRefusal` parameter union on `test`                                                                             |
-| No exact check in the body                                                         | R3          | yes, at the test name |                       | backstop           | Gate on the requirements the test body yields                                                                       |
-| Model judgment as the only check                                                   | R3          | yes, at the test name |                       | backstop           | Judgments carry no `Asserted` requirement                                                                           |
-| An Effect that is not an e2e step (`Effect.sleep`, a delay, a loop) yielded        | R4          |                       | yes, at the yield     | backstop           | Branded step and check handles; an Effect is not a `yield*` operand, and the run-time brand gate names the rewrite  |
-| `yield*` of a bare Promise, or `await` inside the generator                        | R4          |                       | yes                   |                    | A Promise is not iterable; `await` needs `async`                                                                    |
-| Weak matcher (boolean actual, vacuous match, missing argument, vacuous e2e shapes) | R6          | yes, at the call      |                       | backstop           | Refusal members typed with `this`                                                                                   |
-| `async` `describe` body                                                            | R14         | yes                   |                       | `COLLECTION_ERROR` | Return-type conditional on the `describe` parameter                                                                 |
-| Several checks on one observed state                                               | R5          |                       |                       | yes                | Kernel ledger window; a generator's yields are an unordered union                                                   |
-| A check or step written and never yielded                                          | R7          |                       |                       | yes                | Kernel ledger `written` against `yielded`: a check is `BODY_REFUSED`, a step or poll `STEP_NOT_AWAITED` at the call |
-| Raw Vitest `test`, `it` or `expect`                                                | R8          |                       |                       | yes                | Kernel guard in `E2EVitestRunner`                                                                                   |
-| State shared through a closure variable written in a hook                          | R15         |                       |                       | not detectable     | Fresh fixtures and typed hooks cover what is visible                                                                |
+| Shape                                                                                                                                               | Requirement | `tsc`, our message    | `tsc`, compiler's own | Run time only      | Mechanism                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | --------------------- | --------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Sync, `async` or Effect-returning body                                                                                                              | R2          | yes                   |                       | backstop           | `BodyRefusal` parameter union on `test`                                                                            |
+| No exact check in the body                                                                                                                          | R3          | yes, at the test name |                       | backstop           | Gate on the requirements the test body yields                                                                      |
+| Model judgment as the only check                                                                                                                    | R3          | yes, at the test name |                       | backstop           | Judgments carry no `Asserted` requirement                                                                          |
+| An Effect that is not an e2e step (`Effect.sleep`, a delay, a loop) yielded                                                                         | R4          |                       | yes, at the yield     | backstop           | Branded step and check handles; an Effect is not a `yield*` operand, and the run-time brand gate names the rewrite |
+| `yield*` of a bare Promise, or `await` inside the generator                                                                                         | R4          |                       | yes                   |                    | A Promise is not iterable; `await` needs `async`                                                                   |
+| Weak matcher (boolean actual, vacuous match, missing argument, vacuous e2e shapes, the five bar-listed weak matchers, `expect.soft`, `expect.poll`) | R6, R20     | yes, at the call      |                       | backstop           | Refusal members typed with `this`                                                                                  |
+| `async` `describe` body                                                                                                                             | R14         | yes                   |                       | `COLLECTION_ERROR` | Return-type conditional on the `describe` parameter                                                                |
+| Several checks on one observed state                                                                                                                | R5          |                       |                       | yes                | Kernel ledger window; a generator's yields are an unordered union                                                  |
+| A check or step written and never yielded                                                                                                           | R7          |                       |                       | yes                | Kernel ledger `written` against `yielded`: a check is `BODY_REFUSED`, a step `STEP_NOT_AWAITED` at the call        |
+| Raw Vitest `test`, `it` or `expect`                                                                                                                 | R8          |                       |                       | yes                | Kernel guard in `E2EVitestRunner`                                                                                  |
+| State shared through a closure variable written in a hook                                                                                           | R15         |                       |                       | not detectable     | Fresh fixtures and typed hooks cover what is visible                                                               |
 
 Authoring surface. Directional; the units own the signatures.
 
@@ -241,30 +243,32 @@ test('adds a todo', function*({ app, agent, screen, expect }) {
 // refused at the test name: a body yielding no exact check, only agent.assert, or Effect.sleep
 ```
 
-### Owner-answer switches
+### Owner rulings
 
-Each question is carried as built-as-written. The table says what an answer would change; nothing here is settled.
+Settled on 2026-11-10 in SYS-1259's description. The rule behind all four: as strict as the vitest fork, no middle ground. Each is built as written, and nothing here is a switch, a flag or an option.
 
-| Question                                          | Built until answered                                                                                                         | An answer would change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Units touched                   |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| 1. The bar's multi-check example against R5       | R5 as written: one check per observed state; the bar's example file is transcribed as several tests                          | If a check may carry several facts: add a composite state check to R20 and a unit after U9; AE4 and R5 stand. If several checks per state are allowed: R5, AE4 and the R10 exception request change, and the kernel's per-kind window limits are set `unbounded` for locator checks. The switch's second sub-question decides the check-wait-check case separately: the composite-facts answer keeps it refused unless the wait-class reset declaration flips (a KTD2 reset-predicate data change); a two-states answer admits it as two states and withdraws R5's transition rewrite | U1 option, U3, U9; R5, R10, AE4 |
-| 2. `expect.soft` and `expect.poll`                | Both are check kinds the ledger counts once, so R5 applies to them (U11 as written)                                          | "Taught form": several soft checks on one state are allowed and kept, so soft checks stop counting against the window and U11 and R5's application to soft change. "Exception": delete U11 and drop both from R20. A different counting rule: one rule in U11                                                                                                                                                                                                                                                                                                                         | U11; R5, R20, R10               |
-| 3. Run-time refusal for shapes `tsc` cannot reach | Every shape in the decision matrix is built as shown, and the exception request lists each non-compile shape with its reason | "Run time acceptable": the request collapses to one approval. "Each needs an exception": each request row is posted to SYS-1259                                                                                                                                                                                                                                                                                                                                                                                                                                                       | none in code; R9, R10           |
-| 4. The five bar-listed weak value matchers        | They stay available, R20 as written                                                                                          | "Refuse": add five rows to the e2e refusal table in U10 and invert their parity rows                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | U10; R6, R20                    |
+| Ruling                                         | Built                                                                                                                                                                                                                                                       | Units          |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| 1. One check per observed state                | R5: one check per window for every consumer, with no per-kind limit; the rewrite is one read of several facts in one check; check, wait, check is refused with the split-at-the-transition rewrite; the bar's multi-check example is one read and one check | U1, U3, U5, U9 |
+| 2. `expect.soft` and `expect.poll` are refused | Both are refused by e2e's table whatever a table says; U11 and P17 are deleted; both are dropped from R20; an approved exception to the bar; the poll rewrite is a locator check with a timeout                                                             | U1, U10        |
+| 3. Run-time refusal is approved                | Every shape in the decision matrix that `tsc` cannot reach is refused at run time with the compile-time text; each fails the test; none warns and none has an opt-out                                                                                       | U3, U4         |
+| 4. The five weak value matchers are refused    | Five rows in e2e's refused table in U10; the coverage table's rows for them record the refusal                                                                                                                                                              | U10, U23       |
 
-### Proposed exception for SYS-1259 (R10)
+### Approved exceptions for SYS-1259 (R10)
 
-`tsc` cannot reach these shapes under generator authoring. Each row is a request for owner approval in SYS-1259; the maker does not record an exception as approved.
+Owner-approved in SYS-1259's rulings of 2026-11-10. Two are exceptions to the bar: `expect.soft` and `expect.poll` are refused (ruling 2), and the five weak value matchers `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty` are refused (ruling 4). The table is the shapes `tsc` cannot reach under generator authoring, which are refused at run time (ruling 3).
 
 | Shape                                                                       | Requirement | Why `tsc` cannot reach it                                                                                                                                                                                                                                      | What refuses it instead                                                                                                                                                       |
 | --------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Several checks on one observed state                                        | R5, R10     | A generator's yield type is the union of what it yields, with no order, so the number of checks between two steps is not a type. The fork refuses it at run time for the same reason.                                                                          | The kernel ledger refuses the second check with the single-check rewrite, before the test continues.                                                                          |
+| Several checks on one observed state                                        | R5, R10     | A generator's yield type is the union of what it yields, with no order, so the number of checks between two steps is not a type. The fork refuses it at run time for the same reason.                                                                          | The kernel ledger refuses the second check with the single-read rewrite, before the test continues; across a wait it names the split-at-the-transition rewrite.               |
 | A check yielded only on a branch that never runs                            | R3          | The body's yield type is the unordered union over its branches, so a body whose only check sits on a branch that never executes types as checked.                                                                                                              | The run-time gate ends the try with `BODY_REFUSED` (R9).                                                                                                                      |
 | A bare-Promise sleep (`yield*` of a Promise, `await` in the generator)      | R4          | The compiler refuses the code, but with TypeScript's own message about iterators or `async`, which cannot name `waitFor`.                                                                                                                                      | The compiler's refusal. A Promise yielded with `yield` is refused at the test name with our message.                                                                          |
 | An Effect that is not an e2e step (`Effect.sleep`, a delay, a loop) yielded | R4          | The branded handle union rejects it at the yield with the compiler's own assignability message, which cannot name `waitFor` (KTD3).                                                                                                                            | The compiler's error at the yield; the run-time brand gate refuses it with the rewrite.                                                                                       |
 | State shared through a closure variable written in a hook                   | R15         | A closure write is invisible to types, and run-time detection needs the second run on a fresh build that the owner removed.                                                                                                                                    | Typed hooks (no value channel; `beforeAll` and `afterAll` receive only the `request` step) and fresh fixtures per test outside serial groups, which refuse the visible forms. |
-| A check or step written and never yielded                                   | R7          | A discarded value is not a type error in TypeScript, and unyielded e2e handles are branded non-Effects (KTD3), so the fork's `@effect/language-service` `floatingEffect` diagnostic — which keys on a discarded Effect — never fires on them (resolved at U1). | The kernel ledger refuses a check when the body returns; a step or poll fails `STEP_NOT_AWAITED` at the call.                                                                 |
+| A check or step written and never yielded                                   | R7          | A discarded value is not a type error in TypeScript, and unyielded e2e handles are branded non-Effects (KTD3), so the fork's `@effect/language-service` `floatingEffect` diagnostic — which keys on a discarded Effect — never fires on them (resolved at U1). | The kernel ledger refuses a check when the body returns; a step fails `STEP_NOT_AWAITED` at the call.                                                                         |
 | Raw Vitest `test`, `it` or `expect`                                         | R8          | Another package's exports are outside this package's types.                                                                                                                                                                                                    | The kernel guard refuses the test or the call.                                                                                                                                |
+
+The closure-variable row is not a refusal: no run-time check can see it, so only the visible forms are refused. It is a named limit, outside ruling 3.
 
 ### Alternatives Considered
 
@@ -305,7 +309,6 @@ Each question is carried as built-as-written. The table says what an answer woul
 | P14 | effect-e2e      | `feat(acp): coding-agent executor package`                         | U21        | R25                             | P12, P3                     |
 | P15 | effect-e2e      | `feat(web): screenshot comparison, recording and video`            | U22        | R6, R11, R17, R20               | P5, P6, P8                  |
 | P16 | effect-e2e      | `docs(conformance): bar coverage table and close-out`              | U23        | R27, R28, R29                   | all                         |
-| P17 | effect-e2e      | `feat(runner): expect.soft and expect.poll`                        | U11        | R5, R20                         | P5                          |
 
 ```mermaid
 flowchart TB
@@ -317,7 +320,6 @@ flowchart TB
   P3 --> P14
   P2 --> P4
   P3 --> P4 --> P5 --> P6 --> P7
-  P5 --> P17
   P2 --> P8 --> P9
   P4 --> P9
   P7 --> P9
@@ -340,7 +342,6 @@ flowchart TB
   P13 --> P16
   P14 --> P16
   P15 --> P16
-  P17 --> P16
   P3 --> P16
 ```
 
@@ -362,7 +363,6 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 | U8   | Reads and waits                                 | `src/engine/engine.schema.ts`, web `reads.ts`               | U6                 |
 | U9   | Locator matchers                                | `src/runner/screen-expectation.ts`                          | U7, U8             |
 | U10  | Value matchers and weak-check table             | `src/runner/check-table.ts`                                 | U9                 |
-| U11  | `soft` and `poll`                               | `src/runner/soft-poll.ts`                                   | U10                |
 | U12  | Browser fixture, pages and state                | `packages/effect-e2e-web/src/browser.ts`                    | U10                |
 | U13  | Browser fixture, network, dialogs and downloads | `packages/effect-e2e-web/src/network.ts`                    | U12                |
 | U14  | Registration options and run rules              | `src/runner/options.ts`, `vitest-runner.ts`                 | U4, U5             |
@@ -375,6 +375,8 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 | U21  | Coding-agent executor package                   | `packages/effect-e2e-acp/`                                  | U19, U5            |
 | U22  | Screenshots, recording and video                | `src/runner/screenshot.ts`, web `recording.ts`              | U10, U12, U14      |
 | U23  | Coverage table and close-out                    | conformance README, package READMEs                         | all                |
+
+U11 is withdrawn by owner ruling 2. Unit IDs are stable and are not renumbered.
 
 ### Phase: the kernel and the cutover (F1, P1, P2)
 
@@ -401,9 +403,9 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 2. Export from `kernel.ts`: `Asserted`, `Check`, `Ledger` with `makeLedger`, a check minter and `isCheck`, `drive` with its step interpreter, `expectFor`, the types `Gate`, `RequirementOf`, `Body`, `BodyRefusal`, the refusal texts and their `this`-typed forms, and `installGuard`, `markTask`, `isMarked`.
 3. Turn the refusal tables (`refusedText`, `negatedText`, `neededText`) into parameters of `expectFor`; the fork's own lanes pass the current tables, so `it` behaviour does not change.
 4. Type the driver so steps and checks yield branded, non-Effect handles from their iterator, so a generator's yield union cannot collapse to the widest `Effect` (KTD3); `yield*` of `Effect.sleep` is a type error at the yield.
-5. Give `drive` a consumer step interpreter — admit and run each yielded value — beside a reset predicate: the fork's lanes pass the default interpreter, which admits any runnable Effect as today, so `it` behaviour does not change, while a consumer admits only its own branded handles; the reset predicate's default resets on every non-check yield, as today. Give the window an optional per-check-kind limit map beside them — consumer-supplied, `unbounded` allowed, one as the default for every kind — so owner questions 1 and 2 are answered by data, not by a second fork release.
+5. Give `drive` a consumer step interpreter — admit and run each yielded value — beside a reset predicate: the fork's lanes pass the default interpreter, which admits any runnable Effect as today, so `it` behaviour does not change, while a consumer admits only its own branded handles; the reset predicate's default resets on every non-check yield, as today. The window admits exactly one check per observed state for every consumer: there is no per-check-kind limit map and no `unbounded` setting (owner ruling 1), so a consumer cannot loosen the one-check rule.
 6. Give `expectFor` an ordered list of subjects (`matches(actual)`, `checks(actual, mint)`), typed so `expect(actual)` overloads merge.
-7. Leave `soft` and `poll` refused by default; a consumer table may replace them.
+7. `soft` and `poll` stay refused, and no consumer table, option or static makes either available (owner ruling 2); a consumer table's text for either replaces only the wording of the refusal.
 8. Record as resolved: unyielded e2e handles are branded non-Effects (KTD3), so the fork's `@effect/language-service` `floatingEffect` diagnostic cannot see them — R7's exception row stays a run-time refusal, and no language-service check ships with the kernel.
 9. Ship the fork's `minor` change intent for `@systemfsoftware/vitest` (`pnpm change`). The fork's Release workflow consumes it into the `chore(release): version packages` PR; merging that PR is the fork's release — an external release that needs the fork operators' approval — and the commit it lands is what the core pin bump pins. The fork distributes flake tarballs built from a git ref, not npm (`.changeset/README.md`: no npm token, no registry), so no npm publication exists to wait for; the `@systemfsoftware/vitest@v4.1.0` tag and GitHub Release are written automatically on the push after that merge and gate nothing here.
 
@@ -417,8 +419,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 - A consumer table that omits `toBeTruthy` accepts it, while the fork's default table still refuses it with the original text.
 - A reset predicate that returns false for a read keeps one window across the read; a second check in it is refused.
 - Two subjects that both match: the first listed wins.
-- A window limit of 2 admits two checks in one window and refuses the third; `unbounded` admits them all.
-- Locator checks `unbounded` and value checks limited to one in one window: many locator checks pass and the second value check is refused.
+- `expect.soft` and `expect.poll` are refused whatever table a consumer passes; a consumer table's text for either replaces only the wording.
 - A consumer check yielded inside a forked fiber still reaches the ledger.
 - `kernel` types compile for a consumer with no layer services: a body yielding one consumer check has no refusal at its name, and a body yielding none has the no-check refusal.
 - The fork's own `it` lanes pass their existing suites unchanged.
@@ -477,7 +478,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 6. Install the kernel guard in the `E2EVitestRunner` constructor and refuse unmarked tasks in `onBeforeRunTask`, with the effect-e2e rewrite text.
 7. Give `describe` a parameter whose return type refuses a Promise, so an `async` body fails at compile time.
 8. Run each body once; add no second-run lane.
-9. A run-time refusal — the no-check gate, a second check in a window, a written-never-yielded check, an armed wait never joined — ends the try with `BODY_REFUSED` (R9): exit 2, not retried, not absorbed by `test.fail`. A written-never-yielded step and an un-awaited poll fail `STEP_NOT_AWAITED` at the line of the call on the normal failure path (R7) — the code `conclude-attempt.workflow.ts` already emits — so a retry may retry them and `test.fail` absorbs them.
+9. A run-time refusal — the no-check gate, a second check in a window, a written-never-yielded check, an armed wait never joined — ends the try with `BODY_REFUSED` (R9): exit 2, not retried, not absorbed by `test.fail`. Each fails the test; none warns and none has an opt-out (owner ruling 3). A written-never-yielded step fails `STEP_NOT_AWAITED` at the line of the call on the normal failure path (R7) — the code `conclude-attempt.workflow.ts` already emits — so a retry may retry it and `test.fail` absorbs it.
 10. Align the run verdict with the bar's rule (moved from U18 so P3 compares from its first journeys): verdicts map to exits 0/1/3/4/130, the refused class exits 2 with `BODY_REFUSED` as its first producer, the highest code present wins under the bar's ordering (130 > 4 > 3 > 2 > 1 > 0), `TestStatus` gains `flaky`, timed-out and `interrupted`, and the run summary counts flaky tests — passed on retry. Per-code exit outcomes pin the bar-taught cases: `MODEL_UNAVAILABLE` moves from the environment class to the refused class in `failure-class.schema.ts` and exits 2, as agent.md teaches (U19 builds its run-level missing-model shape), and per-code classes only `running.md` teaches stay out of scope per the named follow-up.
 
 **Execution note:** verify first whether Vitest 5's runner can re-collect a file per retry — R15's fresh module realm and U17's attempt coupling depend on it; resolve before P2's cutover merges. If it cannot, name the alternative before building: retries driven at the CLI level, the run command re-invoking Vitest per attempt as `--last-failed` already does — which moves the per-try ledger and the attempt index to the orchestrator and changes U3's try lifecycle and U17's lookup coupling, leaving U14's option decoding unchanged. If neither route reaches a fresh realm, the Goal Capsule's runner stop condition applies.
@@ -488,8 +489,8 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 
 - A test that opens a page and passes a locator check passes, and the report holds a passed `LocatorStep`.
 - A failing check stops the test; the step after it never starts, and the generator's `finally` runs.
-- Two checks in one window: the second is refused with the single-check text (AE4); with a step between them both pass.
-- A locator check written and not yielded is refused `BODY_REFUSED` when the body returns; a step written and not yielded fails `STEP_NOT_AWAITED` at the call, as does an un-awaited poll.
+- Two checks in one window: the second is refused with the single-read text (AE4); with a step between them both pass.
+- A locator check written and not yielded is refused `BODY_REFUSED` when the body returns; a step written and not yielded fails `STEP_NOT_AWAITED` at the call.
 - A body that yields no check fails the no-check backstop at run time with the compile-time text.
 - A test registered through raw Vitest `test` is refused naming effect-e2e's `test`; a raw `expect` call inside an effect-e2e test is refused naming the callback parameter (AE5).
 - An `act` followed by a locator check leaves a saved cache entry; an `act` followed only by a value check leaves it unconfirmed (KTD6).
@@ -499,7 +500,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 - Fixtures are new objects per test outside serial groups: state set on one in test A is absent in test B; two members of a serial group see the same fixture objects.
 - `beforeEach` runs outer-first and `afterEach` inner-first; a failing `beforeAll` skips its scope with `HOOK_FAILED`.
 - Check, `locator.waitFor` on an already-visible node, then a second check: the second check is refused; an `act` before the wait keeps both checks passing.
-- Check, `agent.waitFor` across a real async transition, check: the second check is refused with `BODY_REFUSED` and the message names the transition rewrite — split the test at the transition, or wait with a matcher and assert once.
+- Check, `agent.waitFor` across a real async transition, check: the second check is refused with `BODY_REFUSED` and the message names the transition rewrite — split the test at the transition.
 - A run whose only refusal is `BODY_REFUSED` exits 2.
 - A run whose only failure is `MODEL_UNAVAILABLE` exits 2, not 3.
 - A test that passes on its retry is counted flaky in the summary and does not fail the run.
@@ -539,8 +540,8 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 
 - A well-formed test compiles with exit 0.
 - No exact check, only `agent.assert`, a sync body, an `async` body, an Effect-returning body, a boolean-actual `expect`, and an `async` `describe` each make `tsc` exit non-zero, and each diagnostic contains its rewrite phrase.
-- A `yield*` of a bare Promise and a yielded `Effect.sleep` each make `tsc` exit non-zero with the compiler's own message, recorded in the exception request.
-- Control: two checks on one state compile, and the run refuses them (U3), which is the evidence behind the exception request.
+- A `yield*` of a bare Promise and a yielded `Effect.sleep` each make `tsc` exit non-zero with the compiler's own message, an approved exception (owner ruling 3).
+- Control: two checks on one state compile, and the run refuses them (U3), which is the evidence behind the approved exception.
 - The `init` scaffold generated by the CLI type-checks.
 - A grep of the repo for `from '@systemfsoftware/effect-e2e/runner'` imports of `expect` returns none.
 
@@ -570,7 +571,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 
 1. Define a journey as a name, an `e2e` source, an effect-e2e source and the site it opens.
 2. Spawn `e2e run --reporter json` and `effect-e2e run` once per journey, each journey with its own output directory, with `E2E_TELEMETRY_DISABLED=1` and `DO_NOT_TRACK=1`.
-3. Compare each journey's status, failure code and exit code through a pure `compareVerdicts` workflow; the compared exit code is the journey's own because each journey runs alone. A source whose file holds several tests folds to one verdict first, on both runners' reports, by the bar's exit ordering: the highest exit code present wins and carries its status and failure code, ties resolve to the first failing test in source order (matching e2e's stop-at-first-failure), and `compareVerdicts` reads effect-e2e's `timed-out` as the bar's `failed`, comparing `blocked` and `error` journeys on exit code alone (owner switch 1 transcribes the bar's multi-check example as several tests).
+3. Compare each journey's status, failure code and exit code through a pure `compareVerdicts` workflow; the compared exit code is the journey's own because each journey runs alone. A source whose file holds several tests folds to one verdict first, on both runners' reports, by the bar's exit ordering: the highest exit code present wins and carries its status and failure code, ties resolve to the first failing test in source order (matching e2e's stop-at-first-failure), and `compareVerdicts` reads effect-e2e's `timed-out` as the bar's `failed`, comparing `blocked` and `error` journeys on exit code alone (owner ruling 1: the bar's multi-check example is one read and one check on the effect-e2e side).
 4. Start with journeys for opening and a heading check, a missing locator, an ambiguous locator, a wrong text and a retried failure. Every later PR that builds a behaviour a journey can exercise appends that behaviour's journeys as part of its own proof (the Verification Contract's PR-body rule), so P3 is a dependency of every behaviour PR — directly or through P2's successors in the graph; the skip journey and the retried-test-with-`beforeAll` journey wait for U14 (P8), the sessions journey for U16, the agent-bearing ones for U19–U21, and U23 reconciles the set against the coverage table.
 5. Pin `playwright` to exactly `1.64.1` through a named catalog — `catalogs.differential` in `pnpm-workspace.yaml` with `playwright: catalog:differential` on the conformance package and on `effect-e2e-web`'s `playwright` devDependency, because the engine imports `playwright` from its own package context and without the devDependency pin the two runners still resolve different copies. Both runners then resolve one `playwright-core` revision and one Chromium. The default catalog's `^1.64.0` range, which the published `effect-e2e-web` and `effect-e2e-cli` peers resolve from, stays unchanged and no published peer range narrows; `effect-e2e-web`'s peer dependency stays on the default catalog; never override `@e2e-dev/web`'s pin.
 6. Put the dependency vetting for `e2e` and `@e2e-dev/web` in the PR body: registry maintainers and publish provenance, download counts, source contributors, and real dependents.
@@ -593,7 +594,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 
 ---
 
-### Phase: locators, actions and checks (P4, P5, P17)
+### Phase: locators, actions and checks (P4, P5)
 
 ### U6. Locator algebra
 
@@ -754,7 +755,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 
 ### U10. Value matchers and the weak-check table
 
-**Goal:** value checks cover the bar's table, and weak checks are refused with their rewrite.
+**Goal:** value checks cover the bar's table except the approved exceptions, and weak checks are refused with their rewrite.
 
 **Requirements:** R6, R20; KTD2, KTD5.
 
@@ -768,7 +769,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 **Approach:**
 
 1. Pass e2e's tables to the kernel's `expectFor`: the fork's three cases (boolean actual, vacuous `toMatchObject`, missing argument), plus the vacuous e2e shapes: an empty-string `toContainText`, a match-all pattern in `toMatch`, `stringContaining` or `stringMatching`, and a vacuous Effect Schema (`Unknown` or `Any`) in `toMatchSchema`, and the empty forms of the taught asymmetric stand-ins — `expect.objectContaining({})` and `expect.arrayContaining([])` inside `toEqual`, `toMatchObject`, `toContain` or `toHaveProperty` — which assert nothing about content. The asymmetric stand-ins writing-tests.md teaches — `expect.anything()`, `expect.any(Class)`, and both stand-ins in their populated form — stay available: they are not vacuous (null and undefined fail them), and banning a taught stand-in would break the no-exceptions Key Decision; only the empty form is refused.
-2. Keep `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty` available; owner question 4 is a row change here.
+2. Refuse `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty` with five rows in e2e's refused table, using the fork's rewrites restated for e2e values (assert the value with `toEqual`; assert the contents; assert the shape with `toMatchObject`), and refuse `expect.soft` and `expect.poll` with the rewrite that names a locator check with a timeout (owner rulings 2 and 4). The bar's other value matchers stay available.
 3. Provide the bar's value matchers and `toMatchSchema` for Effect Schema and for any synchronous Standard Schema, with the parsed value returned typed; `expect(value, message?)` is synchronous and a given message leads its failure text; every value check records a `ValueStep`.
 4. Each refusal carries its rewrite and compiles as a `this`-typed refusal at the call.
 
@@ -780,45 +781,13 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 - `toContainText('')` and `toMatch(/.*/)` fail to compile naming a specific alternative; `expect.anything()` inside `toEqual` compiles.
 - `toEqual(expect.objectContaining({}))` and `toContain(expect.arrayContaining([]))` fail to compile naming the field-list or element rewrite; the populated forms compile.
 - `toMatchSchema(Schema.Unknown)` is refused; a precise schema passes and returns its parsed value typed.
-- `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty` compile and pass (owner question 4 default).
+- `toBeTruthy`, `toBeFalsy`, `toBeDefined`, `toHaveLength` and `toHaveProperty` each fail to compile naming their rewrite, and the run-time text matches (owner ruling 4).
+- `expect.soft` and `expect.poll` fail to compile naming a locator check with a timeout, and stay refused whatever the table says (owner ruling 2).
 - `toMatchSchema` with a Standard Schema lists every issue by path on failure.
 - `toBeCloseTo`, `toBeGreaterThanOrEqual` and `toContain` behave as the bar's table says.
 - A value check does not confirm a cache recording (KTD6).
 
 **Verification:** `pnpm --filter @systemfsoftware/effect-e2e test:types` passes with the table's rows pinned.
-
-### U11. `soft` and `poll`
-
-**Goal:** `expect.soft` and `expect.poll` exist in their taught forms, built as the requirements read.
-
-**Requirements:** R20, R5; KTD2.
-
-**Dependencies:** U10.
-
-**Files:**
-
-- `packages/effect-e2e/src/runner/soft-poll.ts` (new), `check-table.ts`, `vitest-runner.ts`
-- Test: `packages/effect-e2e/tests/soft-poll.integration.test.ts`
-
-**Approach:**
-
-1. Replace the kernel's static refusals for `soft` and `poll` in e2e's table with e2e check kinds.
-2. `expect.soft(x).<matcher>` records its failure on the try, lets the body continue, and fails the attempt after the body listing every kept failure; a later `test.skip` keeps the attempt failed.
-3. `expect.poll(read, { timeout, interval, message })` takes an Effect-returning read, re-reads until a value matcher passes, keeps polling through a throwing read, and stops with the attempt; the read is the poll's nested handle (KTD3) — the poll runs it, a read-only read keeps the window, and the poll counts once against R5.
-4. Each is one check in its window under R5. Owner question 2 is a switch in this unit only.
-
-**Test scenarios:**
-
-- Two soft failures in two windows end the attempt with both listed.
-- A soft check and a hard check in one window: the second is refused (R5 as written).
-- A poll whose read returns the wrong value twice then the right one passes on the third read.
-- A poll that never matches fails `ASSERTION_FAILED` with the last value read.
-- A poll whose read throws keeps polling and passes once the read succeeds.
-- A poll written and not yielded fails `STEP_NOT_AWAITED` at the call (R7).
-- A poll whose read performs a read only runs admitted as the window's check: its read is not refused as written-never-yielded, and the window stays through it.
-- A poll stops when the attempt ends.
-
-**Verification:** as U10.
 
 ---
 
@@ -1307,6 +1276,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 2. Confirm every behaviour the table lists has a test that runs through the public API in the conformance suite — including the R20 screenshot and video rows, the R25 agent and executor rows over the scripted stubs, and the R26 strict-cache rows — and that the suite runs at the local profile and in the `test:engine` lane.
 3. Remove any scaffold, dead branch or abandoned attempt left by earlier PRs; confirm no old-API symbol, template or README snippet remains.
 4. Coordinate with the compound `e2e-testing` pack (systemfsoftware PR #919) so its examples compile against the released API.
+5. Give the approved exceptions rows that record the refusal: `expect.soft`, `expect.poll` and each of the five weak value matchers, each with its refusal text and the test that pins it.
 
 **Test expectation:** none -- documentation and the coverage table; the proof is the tests the table cites and `pnpm check:local`.
 
@@ -1319,7 +1289,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 | Gate                   | Command                                                    | Applies to                                                             | Where it runs                                                                                                          |
 | ---------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Static and local tests | `pnpm check:local`                                         | every effect-e2e PR, after the last change                             | locally; output goes in the PR                                                                                         |
-| Type tests             | `pnpm --filter @systemfsoftware/effect-e2e test:types`     | U3, U4, U9, U10, U11, U15                                              | locally, inside `check:static`                                                                                         |
+| Type tests             | `pnpm --filter @systemfsoftware/effect-e2e test:types`     | U3, U4, U9, U10, U15                                                   | locally, inside `check:static`                                                                                         |
 | Public API reports     | `pnpm api:check` (`pnpm api:update` when a report changes) | every PR that changes an export                                        | locally, inside `check:static`                                                                                         |
 | Package types          | `pnpm attw`                                                | every PR that changes a packed output                                  | locally, inside `check:static`                                                                                         |
 | Browser engine suites  | `pnpm check:ci` (`turbo test test:engine`)                 | U5, U6 through U13, U15 through U17, U19 through U22 browser behaviour | affected engine tests on a pull request and merge-queue draft; the full suites on `main` — pending off-host on each PR |
@@ -1334,12 +1304,12 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 
 **Global**
 
-- Every R in R1 through R31 is met and traces to a unit and a merged PR, or sits in the proposed exception request with its owner decision recorded in SYS-1259.
+- Every R in R1 through R31 is met and traces to a unit and a merged PR, or is an approved exception recorded in SYS-1259 (the engines; `expect.soft` and `expect.poll`; the five weak value matchers).
 - Each PR has its number, head SHA and `pnpm check:local` output after the last change, an independent review receipt with no open P0 or P1, and a merge through the merge queue.
 - The fork PR is merged and released with operator approval, and this repository resolves that release.
 - The differential suite passes in `test:engine` with every journey matching `e2e`.
 - No old-API symbol, template, README snippet, scaffold or abandoned-attempt code remains.
-- The proposed exception request is in SYS-1259 for the owner, and each of the four owner questions has a recorded answer applied through its switch.
+- The approved exceptions and the four owner rulings are recorded in SYS-1259, and the code carries no switch, flag or option for any of them.
 
 **Per unit**
 
@@ -1348,7 +1318,7 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 - U3 and U4: the slop fixture project fails `tsc` for every compile-time row of the decision matrix, the old API is gone, and the run's exit codes and flaky count match the bar's rule.
 - U5: a divergent journey fails the run naming the journey and the field; every later behaviour PR's proof lists the journeys it appended.
 - U6 through U8: the fake and the web engine pass the same laws.
-- U9 through U11: every matcher in the bar's locator and value tables has a passing scenario and the weak-check rows are pinned.
+- U9 and U10: every matcher in the bar's locator and value tables has a passing scenario except the approved exceptions, and the weak-check rows are pinned as refused.
 - U12, U13: each browser behaviour in R21 has a law or an integration scenario.
 - U14: the serial scenario and every option-refusal scenario pass.
 - U15, U16: teardown runs after failure; the session restores cookies, local storage and IndexedDB; a setup in another file finishes before any dependent restores, selected by `file:line` or not.
@@ -1374,9 +1344,8 @@ Dependent PRs open against `main` after their dependency merges. F1 ships a `min
 | The decision-model specification and the Agent Client Protocol SDK change upstream                                                                         | U20 or U21 drifts                                                            | Exact version pins; the fluent `client()` API, not the deprecated classes                                                                                                                                                                                                                               |
 | New third-party dependencies fail vetting                                                                                                                  | A package cannot ship                                                        | The PR body shows the vetting; a failed vetting is reported, not waived                                                                                                                                                                                                                                 |
 | A PR's affected lane runs only changed tests, so unchanged browser surfaces are proven on `main` after merge                                               | A browser regression lands before the full engine suites run                 | Changed engine tests run on the PR through the affected lane; the fake engine laws and pure tests run locally; the off-host command is named on every PR                                                                                                                                                |
-| Eighteen PRs queue slowly                                                                                                                                  | The cutover lingers                                                          | P3 follows P2 and gates every behaviour PR, because each appends its journeys to P3's harness; after P3, P4, P8 and P10 proceed in parallel, and P9, P12, P13 and P14 follow the lanes they build on                                                                                                    |
+| Seventeen PRs queue slowly                                                                                                                                 | The cutover lingers                                                          | P3 follows P2 and gates every behaviour PR, because each appends its journeys to P3's harness; after P3, P4, P8 and P10 proceed in parallel, and P9, P12, P13 and P14 follow the lanes they build on                                                                                                    |
 | U16's two-pass session orchestration rests on unprobed Vitest 5 behaviour, as does U3's re-collection probe                                                | A setup-ordering design that Vitest cannot host stalls P9 after P2–P8 queued | U3's probe runs first; U16 states its pass structure (collection, setup, main) and shared per-run key, and its cross-file scenario proves the ordering before P9 merges; the Goal Capsule's runner stop condition applies                                                                               |
-| U1's per-check-kind window limit map has no production consumer unless owner switches 1 and 2 resolve away from the built defaults                         | A tested but unused kernel parameter ships in F1                             | Kept deliberately: the alternative is a second fork release on the critical path when an answer arrives (U1 step 5); the map stays small and its tests are the only cost                                                                                                                                |
 
 ### Documentation / Operational Notes
 
