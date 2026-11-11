@@ -104,6 +104,10 @@ Development setup, the gate and the conventions are in [CONTRIBUTING.md](CONTRIB
 
 Report bugs and request features in the [issue tracker](https://github.com/systemfsoftware/effect-e2e/issues).
 
+## Credits
+
+effect-e2e rebuilds [TesterArmy's e2e](https://github.com/tester-army/e2e) (commit `72abddd`, npm `e2e` 0.21.2, Apache-2.0). See [NOTICE](NOTICE).
+
 ## License
 
 Apache-2.0. See [`packages/effect-e2e/LICENSE`](packages/effect-e2e/LICENSE).
