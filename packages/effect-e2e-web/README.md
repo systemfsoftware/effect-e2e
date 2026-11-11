@@ -4,7 +4,7 @@ The web engine for [`@systemfsoftware/effect-e2e`](../effect-e2e): `layer({ spec
 
 ## Install
 
-Add it as a devDependency. It is distributed as a workspace tarball of the [systemfsoftware flake](https://github.com/systemfsoftware/systemfsoftware) (`packages.<system>.effect-e2e-web`), which `lib.mkConsumerStore` serves to an offline pnpm install. It depends on `@systemfsoftware/effect-e2e`, which comes along with it.
+Add it as a devDependency. It is a workspace tarball of the [effect-e2e flake](https://github.com/systemfsoftware/effect-e2e) (`packages.<system>.effect-e2e-web`), taken from nix.systemfsoftware.com through a flake input. It depends on `@systemfsoftware/effect-e2e`, which comes along with it.
 
 Its peers are `effect` (`^4`) and `playwright` (`^1.64.0`). Then install the browser it launches:
 
