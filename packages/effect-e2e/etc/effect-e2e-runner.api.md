@@ -272,7 +272,7 @@ export const test: E2ETest;
 
 // Warnings were encountered during analysis:
 //
-// dist/runner.d.ts:136:3 - (ae-forgotten-export) The symbol "E2EConfigInput" needs to be exported by the entry point runner.d.ts
+// dist/runner.d.ts:123:3 - (ae-forgotten-export) The symbol "E2EConfigInput" needs to be exported by the entry point runner.d.ts
 
 // (No @packageDocumentation comment for this package)
 
