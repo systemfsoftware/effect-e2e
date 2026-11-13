@@ -80,9 +80,9 @@ jobs:
           fi
           {
             echo "Push set (${SYSTEM}):"
-            printf -- '- %s\n' workspace-tarballs "${members[@]}"
+            printf -- '- %s\n' workspace-tarballs pnpm-store producer-tarballs "${members[@]}"
           } >> "$GITHUB_STEP_SUMMARY"
-          for attr in workspace-tarballs "${members[@]}"; do
+          for attr in workspace-tarballs pnpm-store producer-tarballs "${members[@]}"; do
             if out=$(nix build --no-link --print-out-paths -L "${ref}#packages.${SYSTEM}.${attr}"); then
               while IFS= read -r path; do
                 printf '%s\t%s\n' "$attr" "$path" >> "$RUNNER_TEMP/out-paths"
